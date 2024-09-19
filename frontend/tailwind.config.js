@@ -1,29 +1,21 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './components/**/*.{vue,js}',
-    './layouts/**/*.vue',
-    './pages/**/*.vue',
-    './plugins/**/*.{js,ts}',
-    './nuxt.config.{js,ts}',
+    "./components/**/*.{js,vue,ts}",
+    "./layouts/**/*.vue",
+    "./pages/**/*.vue",
+    "./plugins/**/*.{js,ts}",
+    "./nuxt.config.{js,ts}",
+    "./node_modules/flowbite/**/*.{js,ts}",
   ],
   theme: {
     extend: {
-      colors: {
-        brand: {
-          light: '#3AB0FF',
-          DEFAULT: '#1E90FF',
-          dark: '#0043A7',
-        },
-      },
-      fontFamily: {
-        sans: ['Roboto', 'sans-serif'],
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(to bottom right, #FF4766 0%, #8530B8 75%, #5C28D4 100%)',
+        'custom-gradient-hover': 'linear-gradient(to bottom right, #FF4766 0%, #8530B8 50%, #5C28D4 100%)',
       },
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
+    require('flowbite/plugin')
   ],
 }
