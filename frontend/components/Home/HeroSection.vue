@@ -1,7 +1,7 @@
 <template>
   <section class="relative h-screen flex justify-center items-center">
     <!-- Background Image with Animation -->
-    <img src="@/assets/img/backgrou.jpg" alt="Background Image" class="absolute inset-0 object-cover w-full h-full -z-10 animate-zoom-in">
+    <img src="https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-3d-rendered-movie-theatre-with-white-screen-image_3732826.jpg" alt="Background Image" class="absolute inset-0 object-cover w-full h-full -z-10 animate-zoom-in">
 
     <!-- Black Overlay with 50% opacity -->
     <div class="absolute inset-0 bg-black bg-opacity-50 -z-10"></div>

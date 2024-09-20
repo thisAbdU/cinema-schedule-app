@@ -1,5 +1,5 @@
 <template>
   <div>
-    <HomeTopRatedMovies />
+    <MoviesPagination />
   </div>
 </template>
