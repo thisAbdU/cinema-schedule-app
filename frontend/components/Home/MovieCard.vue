@@ -7,34 +7,17 @@
         <div class="overflow-hidden">
           <div class="flex space-x-4 overflow-x-auto carousel" ref="scrollContainer">
             <!-- Movie Card -->
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/Kassahun Fiseha                      (ካሳሁን ፍሰሃ).jpeg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
+            <div 
+              v-for="(movie, index) in movies" 
+              :key="index" 
+              class="w-1/7 min-w-[150px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card group"
+            >
+              <img 
+                :src="getImageUrl(movie.image)"
+                :alt="movie.title" 
+                class="w-full h-[225px] object-cover rounded-lg transition-all duration-300 ease-in-out group-hover:shadow-lg"
+              >
             </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/9b9823d684e3365967cfc0c86a405eed.jpg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/gize-rebash.jpeg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/lijes.jpeg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/rebuni-cover.jpg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/sost-mazen-cover.jpg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/taza.jpg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/ህዳር.jpeg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <div class="w-1/6 min-w-[200px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card">
-              <img src="../../assets/img/እንደ ሀገር - Ende Hager.jpeg" alt="Movie Poster" class="w-full h-130 object-cover rounded-lg mb-2">
-            </div>
-            <!-- ... -->
           </div>
         </div>
         <!-- Carousel Controls -->
@@ -54,23 +37,42 @@ import { ref, onMounted, onUnmounted } from 'vue';
 
 const scrollContainer = ref(null);
 
+// TODO: Replace with real movie data
+const movies = [
+  { title: "Kassahun Fiseha", image: "@/assets/img/Kassahun Fiseha                      (ካሳሁን ፍሰሃ).jpeg" },
+  { title: "Movie 2", image: "@/assets/img/9b9823d684e3365967cfc0c86a405eed.jpg" },
+  { title: "Gize Rebash", image: "/img/gize-rebash.jpeg" },
+  { title: "Lijes", image: "../../assets/img/lijes.jpeg" },
+  { title: "Rebuni", image: "../../assets/img/rebuni-cover.jpg" },
+  { title: "Sost Mazen", image: "../../assets/img/sost-mazen-cover.jpg" },
+  { title: "Taza", image: "../../assets/img/taza.jpg" },
+  { title: "Hidar", image: "../../assets/img/ህዳር.jpeg" },
+  { title: "Ende Hager", image: "../../assets/img/እንደ ሀገር - Ende Hager.jpeg" },
+  { title: "Sost Mazen", image: "../../assets/img/sost-mazen-cover.jpg" },
+  { title: "Taza", image: "../../assets/img/taza.jpg" },
+  { title: "Hidar", image: "../../assets/img/ህዳር.jpeg" },
+  { title: "Ende Hager", image: "../../assets/img/እንደ ሀገር - Ende Hager.jpeg" },
+];
+
+function getImageUrl(name) {
+  return new URL(`../assets/img/${name}`, import.meta.url).href
+}
+
 const scrollLeft = () => {
-  console.log('Scroll Left');
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: -300, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({ left: -200, behavior: 'smooth' });
   }
 };
 
 const scrollRight = () => {
-  console.log('Scroll Right');
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: 300, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
   }
 };
 
 const autoScroll = () => {
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: 300, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
   }
 };
 
@@ -86,39 +88,31 @@ onMounted(() => {
 .carousel {
   scroll-snap-type: x mandatory;
   scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
 
 .carousel::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Edge */
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
 .carousel > div {
   scroll-snap-align: start;
 }
 
-.carousel-container {
-  display: flex;
-  overflow-x: auto;
-}
-
-.carousel-card {
-  min-width: 200px;
-  flex: 1 0 auto;
-}
-
-.carousel-button {
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-}
-
 .movie-card {
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .movie-card:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
   z-index: 10;
+}
+
+.movie-card:not(:hover) {
+  transform: scale(0.95);
+}
+
+.movie-card:hover ~ .movie-card {
+  transform: translateX(20px);
 }
 </style>
