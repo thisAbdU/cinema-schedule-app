@@ -1,5 +1,5 @@
 <template>
   <div>
-    <HomeMonthlyNewsLetter />
+    <HomeContactUs />
   </div>
 </template>
