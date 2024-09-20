@@ -1,5 +1,5 @@
 <template>
   <div>
-    <HomeContactUs />
+    <HomeTopRatedMovies />
   </div>
 </template>

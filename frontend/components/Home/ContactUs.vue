@@ -75,7 +75,7 @@
   
         <p class="text-xs text-gray-500 dark:text-gray-400">
             By booking a ticket, you agree to our
-            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Terms & Conditions</a>.
+            <a href="#" class="text-red-600 dark:text-red-500 hover:underline">Terms & Conditions</a>.
             Please ensure you arrive on time as latecomers may not be admitted. Tickets are non-refundable.
         </p>
       </div>
@@ -91,6 +91,8 @@
     comment: yup.string().required('Please provide your comment.')
   });
   
+  //TODO: Add your form validation rules here
+  //TODO; Add your form submission logic here
   // Submit handler
   function handleSubmit(values) {
     console.log('Form submitted', values);

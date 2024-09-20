@@ -6,6 +6,9 @@
     <!-- Black Overlay with 50% opacity -->
     <div class="absolute inset-0 bg-black bg-opacity-50 -z-10"></div>
 
+    <!-- Animated Thin Line (Strike) -->
+    <div class="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-white to-transparent animate-move-line"></div>
+
     <!-- Hero content -->
     <div class="relative z-10 text-center px-4">
       <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-7xl lg:text-8xl">
@@ -21,16 +24,16 @@
       </p>
       <!-- Button Container -->
       <div class="mt-6 flex justify-center space-x-4">
-      <!-- First Button -->
-    <button type="button" class="relative inline-flex items-center justify-center p-3 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-transparent border border-white hover:bg-gradient-to-br hover:from-pink-500 hover:to-orange-400 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 transition-colors duration-300 ease-in-out">
-    <span class="absolute inset-0 flex items-center justify-center bg-transparent rounded-md group-hover:bg-opacity-0"></span>
-    <span class="relative font-medium text-lg">Discover More</span>
-    </button>
+        <!-- First Button -->
+        <button type="button" class="relative inline-flex items-center justify-center p-3 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-transparent border border-white hover:bg-gradient-to-br hover:from-pink-500 hover:to-orange-400 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 transition-colors duration-300 ease-in-out">
+          <span class="absolute inset-0 flex items-center justify-center bg-transparent rounded-md group-hover:bg-opacity-0"></span>
+          <span class="relative font-medium text-lg">Discover More</span>
+        </button>
         <!-- Second Button -->
-    <button type="button" class="relative inline-flex items-center justify-center p-3 mb-2 me-2 overflow-hidden text-sm font-bold text-white rounded-lg group bg-transparent border border-white hover:bg-gradient-to-br hover:from-pink-500 hover:to-orange-400 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 transition-colors duration-300 ease-in-out">
-    <span class="absolute inset-0 flex items-center justify-center bg-opacity-0 rounded-md group-hover:bg-transparent"></span>
-    <span class="relative font-bold text-xl">Buy Ticket</span>
-    </button>
+        <button type="button" class="relative inline-flex items-center justify-center p-3 mb-2 me-2 overflow-hidden text-sm font-bold text-white rounded-lg group bg-transparent border border-white hover:bg-gradient-to-br hover:from-pink-500 hover:to-orange-400 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 transition-colors duration-300 ease-in-out">
+          <span class="absolute inset-0 flex items-center justify-center bg-opacity-0 rounded-md group-hover:bg-transparent"></span>
+          <span class="relative font-bold text-xl">Buy Ticket</span>
+        </button>
       </div>
     </div>
   </section>
@@ -46,7 +49,28 @@
   }
 }
 
+@keyframes moveLineDiagonal {
+  0% {
+    transform: translate(-100%, -100%);
+  }
+  100% {
+    transform: translate(100%, 100%);
+  }
+}
+
 .animate-zoom-in {
   animation: zoomIn 20s infinite alternate;
+}
+
+
+.animate-move-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150%;
+  height: 1px; /* Thinner line */
+  background-color: white;
+  animation: moveLineDiagonal 6s linear infinite;
+  transform: rotate(45deg); /* Set diagonal angle */
 }
 </style>

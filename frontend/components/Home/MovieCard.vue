@@ -1,5 +1,5 @@
 <template>
-  <section class="p-4 bg-transparent text-white">
+  <section class="p-4 bg-gradient-to-br from-[#1E1818] via-[#808080] to-[#787776] text-white">
     <div class="container mx-auto">
       <!-- Carousel Container -->
       <div class="relative">

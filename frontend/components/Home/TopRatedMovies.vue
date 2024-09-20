@@ -1,10 +1,11 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  
+  <div class="container mx-auto px-4 py-8 bg-gradient-to-br from-[#1E1818] via-[#808080] to-[#787776]">
     <h1 class="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B99196] to-white">
       Top Rated Movies of the Month
     </h1>
     
-    <p class="text-gray-700 mb-8 max-w-2xl">
+    <p class="text-white mb-8 max-w-2xl">
       Discover the highest-rated movies this month, handpicked by movie lovers just like you. Don't miss out on these must-watch films with top reviews and glowing ratings!
     </p>
     
