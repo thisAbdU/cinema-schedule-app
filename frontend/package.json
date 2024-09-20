@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@vee-validate/yup": "^4.13.2",
     "flowbite": "^2.5.1",
     "nuxt": "^3.13.0",
     "vee-validate": "^4.13.2",
