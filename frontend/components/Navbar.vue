@@ -64,3 +64,13 @@
     </div>
   </nav>
 </template>
+
+<script>
+export default {
+  methods: {
+    handleSearch() {
+      //TODO: Add your logic here
+    }
+  }
+}
+</script>
