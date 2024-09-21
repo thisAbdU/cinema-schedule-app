@@ -1,5 +1,5 @@
 <template>
   <div>
-    <CheckoutPayment />
+    <BookHistoryRateMovie />
   </div>
 </template>
