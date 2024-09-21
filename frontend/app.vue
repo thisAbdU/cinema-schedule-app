@@ -1,5 +1,5 @@
 <template>
   <div>
-    <BookHistoryRateMovie />
+    <AdminSidebar />
   </div>
 </template>
