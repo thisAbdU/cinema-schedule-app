@@ -1,5 +1,5 @@
 <template>
   <div>
-    <CheckoutSelectSeat />
+    <CheckoutPayment />
   </div>
 </template>
