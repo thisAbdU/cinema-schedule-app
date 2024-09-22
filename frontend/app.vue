@@ -1,5 +1,5 @@
 <template>
   <div>
-    <AdminMoviesList />
+    <AdminMoviesHeader />
   </div>
 </template>
