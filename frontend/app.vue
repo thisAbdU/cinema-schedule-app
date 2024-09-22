@@ -1,5 +1,5 @@
 <template>
   <div>
-    <AdminDashboardEvents />
+    <AdminMoviesList />
   </div>
 </template>
