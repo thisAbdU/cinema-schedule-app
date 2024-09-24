@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[#CCCCCC] p-8">
+    <div class="bg-[#CCCCCC] p-16">
       <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-20 flex items-center justify-between">
         <!-- Decreased SVG size -->
         <div class="w-1/5"> 

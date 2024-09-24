@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gradient-to-r from-[#2A2525] via-[#4F4C4C] to-[#818181] py-16">
+    <div class="bg-transparent py-16">
       <div class="max-w-3xl mx-auto text-center space-y-8"> <!-- Add spacing between sections -->
         <h2 class="text-4xl font-bold text-white font-abhaya-libre">
              Request for more information

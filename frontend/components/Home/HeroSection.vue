@@ -1,13 +1,13 @@
 <template>
   <section class="relative h-screen flex justify-center items-center">
     <!-- Background Image with Animation -->
-    <img src="https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-3d-rendered-movie-theatre-with-white-screen-image_3732826.jpg" alt="Background Image" class="absolute inset-0 object-cover w-full h-full -z-10 animate-zoom-in">
+    <!-- <img src="https://png.pngtree.com/thumb_back/fh260/background/20230703/pngtree-3d-rendered-movie-theatre-with-white-screen-image_3732826.jpg" alt="Background Image" class="absolute inset-0 object-cover w-full h-full -z-10 animate-zoom-in"> -->
 
     <!-- Black Overlay with 50% opacity -->
-    <div class="absolute inset-0 bg-black bg-opacity-50 -z-10"></div>
+    <!-- <div class="absolute inset-0 bg-black bg-opacity-50 -z-10"></div> -->
 
     <!-- Animated Thin Line (Strike) -->
-    <div class="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-white to-transparent animate-move-line"></div>
+    <!-- <div class="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-white to-transparent animate-move-line"></div> -->
 
     <!-- Hero content -->
     <div class="relative z-10 text-center px-4">
