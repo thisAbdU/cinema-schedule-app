@@ -1,0 +1,10 @@
+table:
+  schema: public
+  name: movie_actors
+object_relationships:
+  - name: actor
+    using:
+      foreign_key_constraint_on: actor_id
+  - name: movie
+    using:
+      foreign_key_constraint_on: movie_id
