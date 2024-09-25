@@ -1,0 +1,33 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: cinema_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cinema_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  hasura:
+    image: hasura/graphql-engine:v2.0.10
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://cinema_user:password@postgres:5432/cinema_db
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+    volumes:
+      - ./metadata:/hasura/metadata
+      - ./migrations:/hasura/migrations
+      - ./seeds:/hasura/seeds
+    env_file:
+      - ../.env
+
+volumes:
+  postgres_data:
