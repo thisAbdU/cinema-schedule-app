@@ -1,6 +1,20 @@
-actions: []
+actions:
+  - name: login
+    definition:
+      kind: synchronous
+      handler: http://localhost:3000/auth/login
+    comment: handles user login
+  - name: register
+    definition:
+      kind: synchronous
+      handler: http://localhost:3000/auth/register
+    comment: handle register user
 custom_types:
   enums: []
-  input_objects: []
-  objects: []
+  input_objects:
+    - name: LoginInput
+    - name: RegisterInput
+  objects:
+    - name: LoginOutput
+    - name: RegisterOutput
   scalars: []
