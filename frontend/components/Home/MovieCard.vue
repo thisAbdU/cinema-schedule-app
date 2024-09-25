@@ -1,30 +1,39 @@
 <template>
-  <section class="p-4 bg-transparent text-white">
-    <div class="container mx-auto">
+  <section class="py-16 bg-gray-900 text-white overflow-hidden">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-8 text-center">Now Showing</h2>
       <!-- Carousel Container -->
       <div class="relative">
         <!-- Carousel Wrapper -->
         <div class="overflow-hidden">
-          <div class="flex space-x-4 overflow-x-auto carousel" ref="scrollContainer">
+          <div class="flex space-x-6 overflow-x-auto carousel" ref="scrollContainer">
             <!-- Movie Card -->
             <div 
               v-for="(movie, index) in movies" 
               :key="index" 
-              class="w-1/7 min-w-[150px] flex-shrink-0 bg-gray-900 rounded-lg p-0 movie-card group"
+              class="w-64 flex-shrink-0 bg-gray-800 rounded-lg overflow-hidden movie-card group"
             >
-              <img 
-                :src="getImageUrl(movie.image)"
-                :alt="movie.title" 
-                class="w-full h-[225px] object-cover rounded-lg transition-all duration-300 ease-in-out group-hover:shadow-lg"
-              >
+              <div class="relative">
+                <img 
+                  :src="getImageUrl(movie.image)"
+                  :alt="movie.title" 
+                  class="w-full h-96 object-cover transition-all duration-300 ease-in-out group-hover:opacity-75"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                  <h3 class="text-lg font-semibold mb-2">{{ movie.title }}</h3>
+                  <button class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                    Book Now
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <!-- Carousel Controls -->
-        <button @click="scrollLeft" class="absolute top-1/2 left-0 transform -translate-y-1/2 p-2 bg-gray-700 text-white rounded-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+        <button @click="scrollLeft" class="absolute top-1/2 left-4 transform -translate-y-1/2 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300 ease-in-out">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
         </button>
-        <button @click="scrollRight" class="absolute top-1/2 right-0 transform -translate-y-1/2 p-2 bg-gray-700 text-white rounded-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+        <button @click="scrollRight" class="absolute top-1/2 right-4 transform -translate-y-1/2 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300 ease-in-out">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
         </button>
       </div>
@@ -37,21 +46,15 @@ import { ref, onMounted, onUnmounted } from 'vue';
 
 const scrollContainer = ref(null);
 
-// TODO: Replace with real movie data
 const movies = [
-  { title: "Kassahun Fiseha", image: "@/assets/img/Kassahun Fiseha                      (ካሳሁን ፍሰሃ).jpeg" },
-  { title: "Movie 2", image: "@/assets/img/9b9823d684e3365967cfc0c86a405eed.jpg" },
-  { title: "Gize Rebash", image: "/img/gize-rebash.jpeg" },
-  { title: "Lijes", image: "../../assets/img/lijes.jpeg" },
-  { title: "Rebuni", image: "../../assets/img/rebuni-cover.jpg" },
-  { title: "Sost Mazen", image: "../../assets/img/sost-mazen-cover.jpg" },
-  { title: "Taza", image: "../../assets/img/taza.jpg" },
-  { title: "Hidar", image: "../../assets/img/ህዳር.jpeg" },
-  { title: "Ende Hager", image: "../../assets/img/እንደ ሀገር - Ende Hager.jpeg" },
-  { title: "Sost Mazen", image: "../../assets/img/sost-mazen-cover.jpg" },
-  { title: "Taza", image: "../../assets/img/taza.jpg" },
-  { title: "Hidar", image: "../../assets/img/ህዳር.jpeg" },
-  { title: "Ende Hager", image: "../../assets/img/እንደ ሀገር - Ende Hager.jpeg" },
+  { title: "Kassahun Fiseha", image: "Kassahun Fiseha (ካሳሁን ፍሰሃ).jpeg" },
+  { title: "Gize Rebash", image: "gize-rebash.jpeg" },
+  { title: "Lijes", image: "lijes.jpeg" },
+  { title: "Rebuni", image: "rebuni-cover.jpg" },
+  { title: "Sost Mazen", image: "sost-mazen-cover.jpg" },
+  { title: "Taza", image: "taza.jpg" },
+  { title: "Hidar", image: "ህዳር.jpeg" },
+  { title: "Ende Hager", image: "እንደ ሀገር - Ende Hager.jpeg" },
 ];
 
 function getImageUrl(name) {
@@ -60,39 +63,53 @@ function getImageUrl(name) {
 
 const scrollLeft = () => {
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: -200, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({ left: -300, behavior: 'smooth' });
   }
 };
 
 const scrollRight = () => {
   if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
+    scrollContainer.value.scrollBy({ left: 300, behavior: 'smooth' });
   }
 };
 
-const autoScroll = () => {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
-  }
+let autoScrollInterval;
+
+const startAutoScroll = () => {
+  autoScrollInterval = setInterval(() => {
+    if (scrollContainer.value) {
+      const isAtEnd = scrollContainer.value.scrollLeft + scrollContainer.value.clientWidth >= scrollContainer.value.scrollWidth;
+      if (isAtEnd) {
+        scrollContainer.value.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        scrollContainer.value.scrollBy({ left: 300, behavior: 'smooth' });
+      }
+    }
+  }, 5000);
+};
+
+const stopAutoScroll = () => {
+  clearInterval(autoScrollInterval);
 };
 
 onMounted(() => {
-  const interval = setInterval(autoScroll, 5000);
-  onUnmounted(() => {
-    clearInterval(interval);
-  });
+  startAutoScroll();
+});
+
+onUnmounted(() => {
+  stopAutoScroll();
 });
 </script>
 
 <style scoped>
 .carousel {
   scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .carousel::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Opera */
+  display: none;
 }
 
 .carousel > div {
@@ -104,15 +121,11 @@ onMounted(() => {
 }
 
 .movie-card:hover {
-  transform: scale(1.2);
+  transform: scale(1.05);
   z-index: 10;
 }
 
 .movie-card:not(:hover) {
-  transform: scale(0.95);
-}
-
-.movie-card:hover ~ .movie-card {
-  transform: translateX(20px);
+  transform: scale(0.98);
 }
 </style>
