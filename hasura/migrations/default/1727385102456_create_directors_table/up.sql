@@ -1,0 +1,6 @@
+CREATE TABLE directors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    bio TEXT,
+    birthdate DATE
+);

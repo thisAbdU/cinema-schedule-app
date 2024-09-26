@@ -1,0 +1,10 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE TYPE genre_type AS ENUM (
+--     'Scifi',
+--     'Action',
+--     'Comedy',
+--     'Drama',
+--     'Romantic',
+--     'Horror'
+-- );

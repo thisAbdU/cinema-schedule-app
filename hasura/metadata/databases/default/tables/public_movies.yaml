@@ -1,36 +1,3 @@
 table:
-  schema: public
   name: movies
-object_relationships:
-  - name: director
-    using:
-      foreign_key_constraint_on: director_id
-array_relationships:
-  - name: bookmarks
-    using:
-      foreign_key_constraint_on:
-        column: movie_id
-        table:
-          schema: public
-          name: bookmarks
-  - name: movie_actors
-    using:
-      foreign_key_constraint_on:
-        column: movie_id
-        table:
-          schema: public
-          name: movie_actors
-  - name: movie_schedules
-    using:
-      foreign_key_constraint_on:
-        column: movie_id
-        table:
-          schema: public
-          name: movie_schedules
-  - name: ratings
-    using:
-      foreign_key_constraint_on:
-        column: movie_id
-        table:
-          schema: public
-          name: ratings
+  schema: public

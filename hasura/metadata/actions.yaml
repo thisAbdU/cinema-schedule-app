@@ -1,20 +1,38 @@
 actions:
-  - name: login
+  - name: signUp
     definition:
       kind: synchronous
-      handler: http://localhost:3000/auth/login
-    comment: handles user login
-  - name: register
-    definition:
-      kind: synchronous
-      handler: http://localhost:3000/auth/register
-    comment: handle register user
+      handler: http://go-server:3000
+      request_transform:
+        body:
+          action: transform
+          template: |-
+            {
+              "users": {
+                "name": {{$body.input.arg1.username}},
+                "password": {{$body.input.arg1.password}}
+              }
+            }
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/auth/register'
+        version: 2
+      response_transform:
+        body:
+          action: transform
+          template: |-
+            {
+              "message": {{$body}}
+            }
+        template_engine: Kriti
+        version: 2
+    permissions:
+      - role: user
 custom_types:
   enums: []
   input_objects:
-    - name: LoginInput
-    - name: RegisterInput
+    - name: SignUpInput
   objects:
-    - name: LoginOutput
-    - name: RegisterOutput
+    - name: SignUpOutput
   scalars: []
