@@ -1,70 +1,103 @@
 <template>
-    <nav aria-label="Page navigation">
-      <ul class="flex items-center -space-x-px h-8 text-sm">
-        <!-- Previous Button -->
-        <li>
-          <a 
-            href="#" 
-            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
-            aria-label="Previous Page"
-            :class="{'disabled': currentPage === 1}"
-          >
-            <span class="sr-only">Previous</span>
-            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-            </svg>
-          </a>
-        </li>
-  
-        <!-- Page Numbers -->
-        <li v-for="page in totalPages" :key="page">
-          <a
-            href="#"
-            @click.prevent="goToPage(page)"
-            :aria-current="page === currentPage ? 'page' : false"
-            class="flex items-center justify-center px-3 h-8 leading-tight"
-            :class="{
-              'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white': page !== currentPage,
-              'text-white bg-[#6B2BC9] border-blue-300': page === currentPage
-            }"
-          >
-            {{ page }}
-          </a>
-        </li>
-  
-        <!-- Next Button -->
-        <li>
-          <a 
-            href="#" 
-            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:pointer-events-none"
-            aria-label="Next Page"
-            :class="{'disabled': currentPage === totalPages}"
-          >
-            <span class="sr-only">Next</span>
-            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        currentPage: 1, // Track the current page
-        totalPages: 3 // Total number of pages (replace with dynamic data if needed)
-      }
-    },
-    methods: {
-      goToPage(page) {
-        // Update the current page number
-        this.currentPage = page;
-        // Implement any pagination logic, e.g., fetching new data for the selected page
-      }
-    }
+  <nav aria-label="Page navigation" class="mt-8">
+    <ul class="flex items-center justify-center space-x-2">
+      <!-- Previous Button -->
+      <li>
+        <button 
+          @click="goToPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="flex items-center justify-center px-3 h-10 rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Previous Page"
+        >
+          <svg class="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li v-for="page in visiblePages" :key="page">
+        <button
+          @click="goToPage(page)"
+          :aria-current="page === currentPage ? 'page' : undefined"
+          class="flex items-center justify-center px-4 h-10 rounded-md text-white transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-500"
+          :class="{
+            'bg-gray-800 hover:bg-gray-700': page !== currentPage,
+            'bg-gradient-to-r from-pink-500 to-orange-400': page === currentPage
+          }"
+        >
+          {{ page }}
+        </button>
+      </li>
+
+      <!-- Next Button -->
+      <li>
+        <button 
+          @click="goToPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="flex items-center justify-center px-3 h-10 rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Next Page"
+        >
+          <svg class="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps({
+  totalPages: {
+    type: Number,
+    required: true
+  },
+  initialPage: {
+    type: Number,
+    default: 1
   }
-  </script>
-  
+})
+
+const emit = defineEmits(['page-change'])
+
+const currentPage = ref(props.initialPage)
+
+const visiblePages = computed(() => {
+  const delta = 2
+  const range = []
+  const rangeWithDots = []
+  let l
+
+  for (let i = Math.max(2, currentPage.value - delta); i <= Math.min(props.totalPages - 1, currentPage.value + delta); i++) {
+    range.push(i)
+  }
+
+  if (range[0] > 2) {
+    rangeWithDots.push(1, '...')
+  } else {
+    rangeWithDots.push(1)
+  }
+
+  for (const i of range) {
+    rangeWithDots.push(i)
+  }
+
+  if (range[range.length - 1] < props.totalPages - 1) {
+    rangeWithDots.push('...', props.totalPages)
+  } else {
+    rangeWithDots.push(props.totalPages)
+  }
+
+  return rangeWithDots
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= props.totalPages && page !== currentPage.value) {
+    currentPage.value = page
+    emit('page-change', page)
+  }
+}
+</script>

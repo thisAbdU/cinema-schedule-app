@@ -11,7 +11,7 @@
     <div class="relative z-10 flex flex-col min-h-screen">
       <!-- Conditionally render Navbar -->
       <Navbar v-if="!$route.meta.hideNavbar" />
-      <main class="flex-grow">
+      <main class="flex-grow pt-12 pb-8"> 
         <slot />
       </main>
       <Footer />

@@ -1,160 +1,115 @@
 <template>
-    <div class="relative flex min-h-screen bg-gradient-to-r from-black via-gray-800 to-gray-700 overflow-hidden">
-      <!-- Moving thin lines animation -->
+  <div class="relative min-h-screen bg-gray-900 overflow-hidden pb-24">
+    <!-- Background Animation -->
+    <div class="absolute inset-0">
       <div class="line-animation"></div>
-  
-      <!-- Background movie-like moving elements -->
-      <div class="movie-elements">
-        <div class="movie-element one"></div>
-        <div class="movie-element two"></div>
-        <div class="movie-element three"></div>
+      <div class="background-elements">
+        <div v-for="i in 3" :key="i" :class="`shape shape-${i}`"></div>
       </div>
-  
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-center min-h-screen">
       <!-- Left Side - Heading and Message -->
-      <div class="z-10 w-full md:w-1/2 flex flex-col justify-center items-center text-white p-8">
-        <h1 class="text-5xl font-bold mb-6 text-left mx-10 bg-gradient-to-r from-[#F5F2F3] to-[#B53161] text-transparent bg-clip-text">
+      <div class="w-full md:w-1/2 mb-12 md:mb-0 text-center md:text-left">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 to-orange-400 text-transparent bg-clip-text">
           Reset Your Password
         </h1>
-        <div class="bg-black border-2 border-white rounded-lg p-6 w-2/3 text-left mx-10 flex items-center">
-          <!-- SVG Icon -->
-          <svg class="w-8 h-8 mr-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h6l3-7 3 7h6l-3 8H6l-3-8z"></path>
-          </svg>
-          <!-- Text -->
-          <p class="text-lg font-semibold text-white">Please enter your email address to reset your password.</p>
+        <div class="bg-gray-800 bg-opacity-50 backdrop-blur-md border border-gray-700 rounded-lg p-6 inline-block">
+          <div class="flex items-center">
+            <svg class="w-8 h-8 mr-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+            </svg>
+            <p class="text-lg font-semibold text-white">Enter your email to receive a password reset link.</p>
+          </div>
         </div>
       </div>
-  
+
       <!-- Right Side - Forgot Password Form -->
-      <div class="z-10 w-full md:w-1/2 flex justify-center items-center p-8">
-        <div class="bg-white bg-opacity-20 p-12 rounded-xl shadow-lg w-full max-w-md border border-gray-400">
-          <h2 class="text-4xl font-bold mb-6 text-white text-left">Forgot Password</h2>
-  
-          <!-- Forgot Password Form -->
+      <div class="w-full md:w-1/2 max-w-md">
+        <div class="bg-gray-800 bg-opacity-50 backdrop-blur-md p-8 rounded-xl shadow-lg border border-gray-700">
+          <h2 class="text-3xl font-bold mb-6 text-white">Forgot Password</h2>
+
           <form @submit.prevent="handleSubmit">
-            <!-- Email Input -->
-            <div class="mb-4">
-              <input
-                type="email"
-                id="email"
-                v-model="form.email"
-                class="w-full p-2 border border-gray-400 rounded-lg bg-gray-800 bg-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-300"
-                placeholder="Email Address"
-                required
-              />
+            <div class="space-y-4">
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  v-model="email"
+                  placeholder="Enter your email"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  required
+                />
+              </div>
             </div>
-  
-            <!-- Submit Button -->
+
             <button
               type="submit"
-              class="w-full bg-custom-gradient text-white font-bold py-2.5 px-4 rounded-lg hover:bg-custom-gradient-hover transition">
+              class="w-full mt-6 bg-gradient-to-r from-pink-500 to-orange-400 text-white font-bold py-3 px-4 rounded-lg hover:from-pink-600 hover:to-orange-500 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            >
               Send Reset Link
             </button>
           </form>
-  
-          <!-- Back to Sign In -->
-          <div class="mt-6 text-center">
-            <p class="text-white">
-              Remember your password? <a href="/sign-in" class="text-red-500 hover:underline">Sign In</a>
+
+          <div class="mt-6 text-center text-sm">
+            <p class="text-gray-400">
+              Remember your password?
+              <a href="/signin" class="text-pink-500 hover:underline">Sign In</a>
             </p>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        form: {
-          email: '',
-        },
-      };
-    },
-    methods: {
-      handleSubmit() {
-        alert('Password reset link has been sent to your email!');
-        // Here, you would typically handle the API call to send the reset link
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Reuse the same style for line animations */
-  .line-animation {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    background: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 255, 255, 0.1) 2px, rgba(255, 255, 255, 0.1) 4px);
-    animation: lineMove 5s linear;
-  }
-  
-  @keyframes lineMove {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-200%);
-    }
-  }
-  
-  /* Reuse the same style for movie elements */
-  .movie-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  
-  .movie-element {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    animation: moveElement 10s infinite ease-in-out;
-  }
-  
-  .movie-element.one {
-    top: 10%;
-    left: 20%;
-    animation-duration: 12s;
-    animation-delay: -2s;
-  }
-  
-  .movie-element.two {
-    top: 50%;
-    left: 60%;
-    animation-duration: 15s;
-    animation-delay: -3s;
-  }
-  
-  .movie-element.three {
-    top: 80%;
-    left: 10%;
-    animation-duration: 18s;
-    animation-delay: -4s;
-  }
-  
-  @keyframes moveElement {
-    0% {
-      transform: translate(0, 0);
-    }
-    50% {
-      transform: translate(100px, 50px);
-    }
-    100% {
-      transform: translate(0, 0);
-    }
-  }
-  </style>
-  
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const email = ref('')
+
+const handleSubmit = () => {
+  // TODO: Implement actual password reset logic here
+  console.log('Password reset requested for:', email.value)
+  alert('Password reset link has been sent to your email!')
+  email.value = ''
+}
+</script>
+
+<style scoped>
+.line-animation {
+  @apply absolute inset-0 pointer-events-none z-10;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  animation: lineMove 20s linear infinite;
+}
+
+@keyframes lineMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.background-elements {
+  @apply absolute inset-0 overflow-hidden pointer-events-none;
+}
+
+.shape {
+  @apply absolute w-36 h-36 bg-white bg-opacity-5 rounded-full;
+  animation: moveShape 20s infinite ease-in-out;
+}
+
+.shape-1 { top: 20%; left: 15%; animation-duration: 14s; }
+.shape-2 { top: 70%; left: 50%; animation-duration: 18s; }
+.shape-3 { top: 50%; left: 80%; animation-duration: 12s; }
+
+@keyframes moveShape {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(100px, 50px); }
+}
+</style>
