@@ -9,7 +9,8 @@
 
     <!-- Main content area -->
     <div class="relative z-10 flex flex-col min-h-screen">
-      <Navbar />
+      <!-- Conditionally render Navbar -->
+      <Navbar v-if="!$route.meta.hideNavbar" />
       <main class="flex-grow">
         <slot />
       </main>
@@ -20,9 +21,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import Navbar from '~/components/Navbar.vue'
 import Footer from '~/components/Footer.vue'
 
+const route = useRoute()
 const lines = ref([])
 
 onMounted(() => {

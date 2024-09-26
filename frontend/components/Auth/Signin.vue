@@ -1,243 +1,150 @@
 <template>
-    <div class="relative flex min-h-screen bg-gradient-to-r from-black via-gray-800 to-gray-700 overflow-hidden">
-      <!-- Moving thin lines animation -->
+  <div class="relative min-h-screen bg-gray-900 overflow-hidden pb-34">
+
+    <!-- Background Animation -->
+    <div class="absolute inset-0">
       <div class="line-animation"></div>
-  
-      <!-- Background movie-like moving elements -->
-      <!-- Background shapes -->
       <div class="background-elements">
-        <div class="shape shape-one"></div>
-        <div class="shape shape-two"></div>
-        <div class="shape shape-three"></div>
+        <div v-for="i in 3" :key="i" :class="`shape shape-${i}`"></div>
       </div>
-  
-  
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-center min-h-screen">
       <!-- Left Side - Heading and Message -->
-      <div class="z-10 w-full md:w-1/2 flex flex-col justify-center items-center text-white p-8">
-        <h1 class="text-6xl font-bold mb-6 text-left mx-10 bg-gradient-to-r from-[#F5F2F3] to-[#B53161] text-transparent bg-clip-text">
+      <div class="w-full md:w-1/2 mb-12 md:mb-0 text-center md:text-left">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 to-orange-400 text-transparent bg-clip-text">
           Welcome Back!
         </h1>
-        <div class="bg-black border-2 border-white rounded-lg p-6 w-2/3 text-left mx-10 flex items-center">
-        <!-- SVG Icon -->
-        <svg class="w-8 h-8 mr-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h6l3-7 3 7h6l-3 8H6l-3-8z"></path>
-        </svg>
-        <!-- Text -->
-        <p class="text-lg font-semibold text-white">Sign in to your account and start booking your tickets!</p>
+        <div class="bg-gray-800 bg-opacity-50 backdrop-blur-md border border-gray-700 rounded-lg p-6 inline-block">
+          <div class="flex items-center">
+            <svg class="w-8 h-8 mr-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+            </svg>
+            <p class="text-lg font-semibold text-white">Sign in to your account and start booking your tickets!</p>
+          </div>
         </div>
       </div>
-  
+
       <!-- Right Side - Sign-in Form -->
-      <div class="z-10 w-full md:w-1/2 flex justify-center items-center p-8">
-        <div class="bg-white bg-opacity-20 p-12 rounded-xl shadow-lg w-full max-w-md border border-gray-400">
-          <h2 class="text-4xl font-bold mb-6 text-white text-left">Sign In</h2>
-  
-          <!-- Sign-in Form -->
+      <div class="w-full md:w-1/2 max-w-md">
+        <div class="bg-gray-800 bg-opacity-50 backdrop-blur-md p-8 rounded-xl shadow-lg border border-gray-700">
+          <h2 class="text-3xl font-bold mb-6 text-white">Sign In</h2>
+
           <form @submit.prevent="handleSubmit">
-            <!-- Email Input -->
-            <div class="mb-4">
-              <input
-                type="email"
-                id="email"
-                v-model="form.email"
-                class="w-full p-2 border border-gray-400 rounded-lg bg-gray-800 bg-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-300"
-                placeholder="Email"
-                required
-              />
+            <div class="space-y-4">
+              <div v-for="field in formFields" :key="field.id">
+                <label :for="field.id" class="block text-sm font-medium text-gray-300 mb-1">{{ field.label }}</label>
+                <input
+                  :type="field.type"
+                  :id="field.id"
+                  v-model="form[field.id]"
+                  :placeholder="field.placeholder"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  required
+                />
+              </div>
             </div>
-  
-            <!-- Password Input -->
-            <div class="mb-4">
-              <input
-                type="password"
-                id="password"
-                v-model="form.password"
-                class="w-full p-2 border border-gray-400 rounded-lg bg-gray-800 bg-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-300"
-                placeholder="Password"
-                required
-              />
-            </div>
-  
-            <!-- Submit Button -->
+
             <button
               type="submit"
-              class="w-full bg-custom-gradient text-white font-bold py-2.5 px-4 rounded-lg hover:bg-custom-gradient-hover transition">
+              class="w-full mt-6 bg-gradient-to-r from-pink-500 to-orange-400 text-white font-bold py-3 px-4 rounded-lg hover:from-pink-600 hover:to-orange-500 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            >
               Sign In
             </button>
           </form>
-  
-          <!-- Divider Line -->
-          <div class="my-6 flex items-center justify-center">
-            <hr class="w-full border-gray-400"/>
-            <span class="px-2 text-white">or</span>
-            <hr class="w-full border-gray-400"/>
+
+          <div class="mt-6 flex items-center justify-center">
+            <span class="bg-gray-700 px-4 text-sm text-gray-400">or</span>
+            <hr class="w-full border-t border-gray-700" />
           </div>
-  
-          <!-- Social Sign-in Options -->
-          <div class="flex flex-col space-y-4">
-            <!-- Google Sign-in -->
+
+          <div class="mt-6 space-y-4">
             <button
-              class="w-full bg-white text-gray-800 font-bold py-2 px-4 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-100 transition"
+              v-for="provider in socialProviders"
+              :key="provider.name"
+              :class="`w-full py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-${provider.color}-500 ${provider.bgClass} ${provider.textClass}`"
             >
-              <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Icon" class="w-5 h-5"/>
-              <span>Sign In with Google</span>
-            </button>
-  
-            <!-- Facebook Sign-in -->
-            <button
-              class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center space-x-2 hover:bg-blue-700 transition"
-            >
-              <img src="https://img.icons8.com/ios-filled/50/ffffff/facebook-new.png" alt="Facebook Icon" class="w-5 h-5"/>
-              <span>Sign In with Facebook</span>
+              <component :is="provider.icon" class="w-5 h-5" />
+              <span>Sign in with {{ provider.name }}</span>
             </button>
           </div>
-  
-          <!-- Additional Links -->
-          <div class="mt-6 flex flex-row items-center space-x-4 mx-6">
-            <p class="text-white">
-              <a href="/forgot-password" class="text-red-500 hover:underline">Forgot Password?</a>
-            </p>
-            <p class="text-white">
-                |
-            </p>
-            <p class="text-white">
-              <a href="/support" class="text-red-500 hover:underline">Customer Support</a>
+
+          <div class="mt-6 flex justify-between text-sm">
+            <a href="/forgot-password" class="text-pink-500 hover:underline">Forgot Password?</a>
+            <a href="/support" class="text-pink-500 hover:underline">Customer Support</a>
+          </div>
+
+          <div class="mt-6 text-center text-sm">
+            <p class="text-gray-400">
+              Don't have an account?
+              <a href="/signup" class="text-pink-500 hover:underline">Sign up</a>
             </p>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        form: {
-          email: '',
-          password: '',
-        },
-      };
-    },
-    methods: {
-      handleSubmit() {
-        alert('Sign in form submitted!');
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Cinematic moving lines */
-  .line-animation {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    background: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 255, 255, 0.1) 2px, rgba(255, 255, 255, 0.1) 4px);
-    animation: lineMove 5s linear ;
-  }
-  
-  @keyframes lineMove {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-200%);
-    }
-  }
-  
-  /* Movie-like background elements */
-  .movie-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  
-  .movie-element {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    animation: moveElement 10s infinite ease-in-out;
-  }
-  
-  .movie-element.one {
-    top: 10%;
-    left: 20%;
-    animation-duration: 12s;
-    animation-delay: -2s;
-  }
-  
-  .movie-element.two {
-    top: 50%;
-    left: 60%;
-    animation-duration: 15s;
-    animation-delay: -3s;
-  }
-  
-  .movie-element.three {
-    top: 80%;
-    left: 10%;
-    animation-duration: 18s;
-    animation-delay: -4s;
-  }
-    /* Background shapes */
-    .background-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  
-  .shape {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    animation: moveShape 10s infinite ease-in-out;
-  }
-  
-  .shape-one {
-    top: 20%;
-    left: 15%;
-    animation-duration: 14s;
-  }
-  
-  .shape-two {
-    top: 70%;
-    left: 50%;
-    animation-duration: 18s;
-  }
-  
-  .shape-three {
-    top: 50%;
-    left: 80%;
-    animation-duration: 12s;
-  }
+  </div>
+</template>
 
-  
-  @keyframes moveElement {
-    0% {
-      transform: translate(0, 0);
-    }
-    50% {
-      transform: translate(100px, 50px);
-    }
-    100% {
-      transform: translate(0, 0);
-    }
-  }
-  </style>
+<script setup>
+import { ref } from 'vue'
+import {CircleUser, FacebookIcon } from 'lucide-vue-next'
+
+const form = ref({
+  email: '',
+  password: ''
+})
+
+const formFields = [
+  { id: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' },
+  { id: 'password', type: 'password', label: 'Password', placeholder: 'Enter your password' }
+]
+
+const socialProviders = [
+  { name: 'Google', icon: CircleUser, bgClass: 'bg-white', textClass: 'text-gray-800', color: 'gray' },
+  { name: 'Facebook', icon: FacebookIcon, bgClass: 'bg-blue-600', textClass: 'text-white', color: 'blue' }
+]
+
+const handleSubmit = () => {
+  // TODO: Implement actual form submission logic here
+  console.log('Form submitted:', form.value)
+  alert('Sign in form submitted!')
+}
+</script>
+
+<style scoped>
+.line-animation {
+  @apply absolute inset-0 pointer-events-none z-10;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  animation: lineMove 20s linear infinite;
+}
+
+@keyframes lineMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.background-elements {
+  @apply absolute inset-0 overflow-hidden pointer-events-none;
+}
+
+.shape {
+  @apply absolute w-36 h-36 bg-white bg-opacity-5 rounded-full;
+  animation: moveShape 20s infinite ease-in-out;
+}
+
+.shape-1 { top: 20%; left: 15%; animation-duration: 14s; }
+.shape-2 { top: 70%; left: 50%; animation-duration: 18s; }
+.shape-3 { top: 50%; left: 80%; animation-duration: 12s; }
+
+@keyframes moveShape {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(100px, 50px); }
+}
+</style>

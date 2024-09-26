@@ -12,9 +12,13 @@
   "dependencies": {
     "@vee-validate/nuxt": "^4.13.2",
     "@vee-validate/yup": "^4.13.2",
+    "autoprefixer": "^10.4.20",
     "chart.js": "^4.4.4",
     "flowbite": "^2.5.1",
+    "lucide-vue-next": "^0.446.0",
     "nuxt": "^3.13.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
     "vee-validate": "^4.13.2",
     "vue": "latest",
     "vue-router": "latest",
