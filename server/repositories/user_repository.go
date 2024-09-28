@@ -4,6 +4,7 @@ import (
 	"cinema-schedule-backend/domain"
 	"context"
 	"errors"
+	"log"
 
 	"github.com/hasura/go-graphql-client"
 )
@@ -19,8 +20,9 @@ func NewUserRepository(client *graphql.Client) *UserRepository {
 }
 
 func (r *UserRepository) CreateUser(user domain.User) (domain.User, error) {
+	log.Println("Repository is also called")
 	var m struct {
-		InsertUser domain.User `graphql:"insert_users_one(object: {email: $email, password: $password, first_name: $first_name, last_name: $last_name})"`
+		InsertUser domain.User `graphql:"insert_users_one(object: {email: $email, password: $password, username: $username})"`
 	}
 
 	variables := map[string]interface{}{
@@ -30,27 +32,34 @@ func (r *UserRepository) CreateUser(user domain.User) (domain.User, error) {
 	}
 
 	err := r.client.Mutate(context.Background(), &m, variables)
-
+	
 	if err != nil {
+		log.Printf("Error occurred during user creation: %v", err)
 		return domain.User{}, err
 	}
+	
 
 	return m.InsertUser, nil
 }
 
-func (r *UserRepository) GetUser(email string) (domain.User, error) {
+func (r *UserRepository) GetUser(username string) (domain.User, error) {
 	var q struct {
-		Users []domain.User `graphql:"users(where: {email: {_eq: $email}})"`
+		Users []domain.User `graphql:"users(where: {username: {_eq: $username}})"`
 	}
+
 	variables := map[string]interface{}{
-		"email": email,
+		"username": username,
 	}
 	err := r.client.Query(context.Background(), &q, variables)
 	if err != nil {
 		return domain.User{}, err
 	}
 	
+	log.Printf("Executing GraphQL query for user: %s", username)
+	log.Printf("GraphQL Variables: %+v", variables)
+
 	if len(q.Users) == 0 {
+		log.Println("quuser", q.Users)
 		return domain.User{}, errors.New("user not found")
 	}
 

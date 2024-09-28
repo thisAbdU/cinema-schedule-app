@@ -13,6 +13,9 @@ RUN go mod download && go mod verify
 # Copy the rest of the application code
 COPY . .
 
+# Copy the .env file if it exists in the build context
+# COPY ../env ./
+
 # Build the Go server binary
 RUN go build -v -o /usr/local/bin/ ./...
 

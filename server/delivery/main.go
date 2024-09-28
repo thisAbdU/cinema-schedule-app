@@ -8,11 +8,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
+
 
 	"github.com/gin-gonic/gin"
 	"github.com/hasura/go-graphql-client"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
+	// "path/filepath"
 )
 
 type hasuraAuthTransport struct {
@@ -26,20 +27,20 @@ func (h *hasuraAuthTransport) RoundTrip(req *http.Request) (*http.Response, erro
 	return h.Transport.RoundTrip(req)
 }
 
-func init() {
-    // Construct the path to the .env file in the root folder
-    rootPath, _ := filepath.Abs("../.env")
-    err := godotenv.Load(rootPath)
-    if err != nil {
-        log.Fatalf("Error loading .env file: %v", err)
-    }
-}
+// func init() {
+//     // Construct the path to the .env file in the root folder
+//     rootPath, _ := filepath.Abs("../.env")
+//     err := godotenv.Load(rootPath)
+//     if err != nil {
+//         log.Fatalf("Error loading .env file: %v", err)
+//     }
+// }
 
 func main() {
 	route := gin.New()
 	route.Use(gin.Logger())
 	adminSecret := os.Getenv("HASURA_GRAPHQL_ADMIN_SECRET")
-	hasuraEndpoint := os.Getenv("HASURA_URL")
+	hasuraEndpoint := os.Getenv("HASURA_GRAPHQL_ENDPOINT")
 
 	httpClient := &http.Client{
 		Transport: &hasuraAuthTransport{

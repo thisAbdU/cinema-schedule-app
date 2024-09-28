@@ -1,30 +1,48 @@
 actions:
-  - name: signUp
+  - name: login
     definition:
       kind: synchronous
-      handler: http://go-server:3000
+      handler: '{{WEB_HOOK_URL}}/auth/login'
       request_transform:
         body:
           action: transform
           template: |-
             {
-              "users": {
-                "name": {{$body.input.arg1.username}},
-                "password": {{$body.input.arg1.password}}
-              }
+              "username": {{$body.input.input.username}},
+              "password": {{$body.input.input.password}}
             }
         method: POST
         query_params: {}
         template_engine: Kriti
-        url: '{{$base_url}}/auth/register'
         version: 2
       response_transform:
         body:
           action: transform
-          template: |-
+          template: |
+            {{$body}}
+        template_engine: Kriti
+        version: 2
+  - name: signUp
+    definition:
+      kind: synchronous
+      handler: http://go-server:3000/auth/register
+      request_transform:
+        body:
+          action: transform
+          template: |
             {
-              "message": {{$body}}
+              "username": "{{$body.input.input.username }}",
+              "email": "{{$body.input.input.email }}",
+              "password": "{{$body.input.input.password }}"
             }
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        version: 2
+      response_transform:
+        body:
+          action: transform
+          template: '{{$body}}'
         template_engine: Kriti
         version: 2
     permissions:
@@ -33,6 +51,10 @@ custom_types:
   enums: []
   input_objects:
     - name: SignUpInput
+    - name: LoginInput
+    - name: LoginDto
   objects:
     - name: SignUpOutput
+    - name: LoginOutput
+    - name: LoginResponse
   scalars: []

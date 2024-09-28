@@ -4,6 +4,7 @@ import (
 	"cinema-schedule-backend/domain"
 	"cinema-schedule-backend/utils"
 	"errors"
+	"log"
 )
 
 type UserService struct {
@@ -17,6 +18,7 @@ func NewUserService(repo domain.UserRepositoryInterface) *UserService {
 }
 
 func (s *UserService) SignUp(user domain.User) (domain.UserDto, error) {
+	log.Println("service is also called")
 	if len(user.Password) < 7 {
 		return domain.UserDto{}, errors.New("password must be at least 7 characters long")
 	}
@@ -36,13 +38,15 @@ func (s *UserService) SignUp(user domain.User) (domain.UserDto, error) {
 	return domain.UserDto{User: user, AccessToken: accessToken}, nil
 }
 
-func (s *UserService) Login(email string, password string) (domain.UserDto, error) {
-	user, err := s.repo.GetUser(email)
+func (s *UserService) Login(username string, password string) (domain.UserDto, error) {
+	user, err := s.repo.GetUser(username)
 	if err != nil {
+		log.Println("error inside the service", err)
 		return domain.UserDto{}, err
 	}
 
 	err = utils.IsPasswordCorrect(password, user.Password)
+	
 	if err != nil {
 		return domain.UserDto{}, err
 	}

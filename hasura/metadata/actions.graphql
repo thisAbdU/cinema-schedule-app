@@ -1,4 +1,10 @@
 type Mutation {
+  login(
+    input: LoginDto!
+  ): LoginResponse!
+}
+
+type Mutation {
   signUp(
     input: SignUpInput!
   ): SignUpOutput!
@@ -10,7 +16,27 @@ input SignUpInput {
   password: String!
 }
 
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+input LoginDto {
+  username: String!
+  password: String!
+}
+
 type SignUpOutput {
   message: String!
+}
+
+type LoginOutput {
+  message: String!
+  token: String
+}
+
+type LoginResponse {
+  message: String!
+  accessToken: String
 }
 

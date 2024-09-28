@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:15
@@ -5,60 +7,61 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: cinema_db
+    networks:
+      - cinema-schedule-app_default
 
-  hasura:
-    image: hasura/graphql-engine:v2.42.0
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://cinema_user:password@postgres:5432/cinema_db
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_JWT_SECRET: '{ "type": "HS256", "key": "oursupersecretsupersecurekey1234567890" }'
-      WEB_HOOK_URL: http://go-server:3000
-      HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"athena":{"uri":"http://data-connector-agent:8081/api/v1/athena"},"mariadb":{"uri":"http://data-connector-agent:8081/api/v1/mariadb"},"mysql8":{"uri":"http://data-connector-agent:8081/api/v1/mysql"},"oracle":{"uri":"http://data-connector-agent:8081/api/v1/oracle"},"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
-
-  graphql-engine:
-    image: hasura/graphql-engine:v2.42.0
-    ports:
-      - "8080:8080"
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://cinema_user:password@postgres:5432/cinema_db
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_JWT_SECRET: '{ "type": "HS256", "key": "oursupersecretsupersecurekey1234567890" }'
-      WEB_HOOK_URL: http://go-server:3000
-      HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"athena":{"uri":"http://data-connector-agent:8081/api/v1/athena"},"mariadb":{"uri":"http://data-connector-agent:8081/api/v1/mariadb"},"mysql8":{"uri":"http://data-connector-agent:8081/api/v1/mysql"},"oracle":{"uri":"http://data-connector-agent:8081/api/v1/oracle"},"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
-    depends_on:
-      data-connector-agent:
-        condition: service_healthy
   go-server:
     build:
-      context: ./backend
+      context: ./server
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - HASURA_GRAPHQL_ENDPOINT=http://graphql-engine:8080/v1/graphql
       - HASURA_GRAPHQL_ADMIN_SECRET=myadminsecretkey
-      - JWT_SECRET=jwt_secret_123
+      - JWT_SECRET=your_new_jwt_secret_key_that_is_long_enough
       - PORT=3000
     volumes:
       - uploads:/usr/src/app/uploads
+    networks:
+      - cinema-schedule-app_default
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
+  graphql-engine:
+    image: hasura/graphql-engine:v2.42.0
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:password@postgres:5432/cinema_db
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_JWT_SECRET: '{ "type": "HS256", "key": "your_new_jwt_secret_key_that_is_long_enough" }'
+      WEB_HOOK_URL: http://go-server:3000
+      HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"athena":{"uri":"http://data-connector-agent:8081/api/v1/athena"},"mariadb":{"uri":"http://data-connector-agent:8081/api/v1/mariadb"},"mysql8":{"uri":"http://data-connector-agent:8081/api/v1/mysql"},"oracle":{"uri":"http://data-connector-agent:8081/api/v1/oracle"},"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
+    depends_on:
+      data-connector-agent:
+        condition: service_healthy
+    networks:
+      - cinema-schedule-app_default
 
   data-connector-agent:
     image: hasura/graphql-data-connector:v2.42.0
     restart: always
     ports:
-      - "8081:8081"
+      - "8083:8083"
     environment:
       QUARKUS_LOG_LEVEL: ERROR
       QUARKUS_OPENTELEMETRY_ENABLED: "false"
@@ -68,7 +71,12 @@ services:
       timeout: 10s
       retries: 5
       start_period: 5s
+    networks:
+      - cinema-schedule-app_default
 
 volumes:
   db_data:
   uploads:
+
+networks:
+  cinema-schedule-app_default:
