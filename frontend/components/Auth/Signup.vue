@@ -44,12 +44,14 @@
               </div>
             </div>
 
+            <router-link to="/auth/signup">
             <button
               type="submit"
               class="w-full mt-6 bg-gradient-to-r from-pink-500 to-orange-400 text-white font-bold py-3 px-4 rounded-lg hover:from-pink-600 hover:to-orange-500 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
               Sign Up
             </button>
+          </router-link>
           </form>
 
           <div class="mt-6 flex items-center justify-center">

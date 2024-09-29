@@ -1,10 +1,11 @@
 const routes = [
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: () => import('@/components/Auth/Signup.vue'),
-      meta: { hideNavbar: true }
-    },
-    // other routes...
-  ]
-  
+  { path: '/', component: Home },
+  { path: '/signup', component: SignUp }
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export default router;
