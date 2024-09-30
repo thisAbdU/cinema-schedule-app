@@ -25,6 +25,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@nuxtjs/apollo": "^5.0.0-alpha.14",
     "@nuxtjs/tailwindcss": "^6.12.1"
   }
 }

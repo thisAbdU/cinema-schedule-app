@@ -1,5 +1,6 @@
 <template>
   <div class="bg-transparent py-16">
+    <section id="contact-section">
     <div class="max-w-3xl mx-auto text-center space-y-8">
       <h2 class="text-4xl font-bold text-white font-abhaya-libre">
         Request More Information
@@ -78,6 +79,7 @@
         Please ensure you arrive on time as latecomers may not be admitted. Tickets are non-refundable.
       </p>
     </div>
+  </section>
   </div>
 </template>
 

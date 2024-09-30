@@ -86,7 +86,7 @@ const verifyOTP = async () => {
     otpValid.value = true
     otpError.value = false
     setTimeout(() => {
-      router.push('/dashboard')
+      router.push('/')
     }, 1000)
   } else {
     otpValid.value = false

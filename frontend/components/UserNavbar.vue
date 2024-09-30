@@ -88,7 +88,7 @@
     { name: 'Home', href: '/', active: true },
     { name: 'Movies', href: '/movies', active: false },
     { name: 'Bookmarks', href: '/bookmarks', active: false },
-    { name: 'Contact', href: '/contact', active: false },
+    { name: 'Contact', href: '/#contact-section', active: false },
   ]
   
   const handleSearch = () => {

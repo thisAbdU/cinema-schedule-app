@@ -19,12 +19,16 @@
             </svg>
           </div>
         </form>
+        
+        <a href="/auth/signup">
         <button 
           type="button"
           class="text-white bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out"
         >
           Get Started
         </button>
+        </a>
+
         <button 
           @click="toggleMenu"
           type="button"
@@ -70,7 +74,7 @@ const navItems = [
   { name: 'Home', href: '/', active: true },
   { name: 'Movies', href: '/movies', active: false },
   { name: 'Bookmarks', href: '/bookmarks', active: false },
-  { name: 'Contact', href: '/contact', active: false },
+  { name: 'Contact', href: '/#contact-section', active: false }, 
 ]
 
 const handleSearch = () => {

@@ -24,6 +24,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Navbar from '~/components/Navbar.vue'
 import Footer from '~/components/Footer.vue'
+import UserNavbar from '~/components/UserNavbar.vue'
 
 const route = useRoute()
 const lines = ref([])

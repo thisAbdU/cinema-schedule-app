@@ -44,14 +44,12 @@
               </div>
             </div>
 
-            <router-link to="/auth/signup">
             <button
               type="submit"
               class="w-full mt-6 bg-gradient-to-r from-pink-500 to-orange-400 text-white font-bold py-3 px-4 rounded-lg hover:from-pink-600 hover:to-orange-500 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
               Sign Up
             </button>
-          </router-link>
           </form>
 
           <div class="mt-6 flex items-center justify-center">
@@ -73,10 +71,10 @@
           <div class="mt-6 text-center text-sm">
             <p class="text-gray-400">
               Already registered?
-              <a href="/login" class="text-pink-500 hover:underline">Sign in</a>
+              <a href="/auth/signin" class="text-pink-500 hover:underline">Sign in</a>
             </p>
             <p class="mt-2">
-              <a href="/support" class="text-pink-500 hover:underline">Customer Support</a>
+              <a href="/#contact-section" class="text-pink-500 hover:underline">Customer Support</a>
             </p>
 
             <p class="mb-20">
@@ -118,9 +116,11 @@ const handleSubmit = () => {
     return
   }
   // TODO: Implement actual form submission logic here
-  console.log('Form submitted:', form.value)
-  alert('Form submitted successfully')
+  
+  // Redirect to /auth/otp
+  window.location.href = '/auth/otp'
 }
+
 </script>
 
 <style scoped>
