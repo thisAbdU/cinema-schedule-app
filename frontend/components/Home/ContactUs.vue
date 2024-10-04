@@ -7,10 +7,11 @@
       </h2>
       
       <!-- Form section -->
-      <Form @submit="handleSubmit" class="space-y-4">
+      <form @submit="handleSubmit" class="space-y-4">
         <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 shadow-md">
           <div class="px-4 py-6 bg-white rounded-t-lg dark:bg-gray-800">
-            <Field
+            <input
+              v-model="comment"
               name="comment"
               as="textarea"
               id="comment"
@@ -18,7 +19,7 @@
               class="w-full px-3 py-2 text-sm text-gray-900 bg-white border rounded-lg dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500 dark:text-white dark:placeholder-gray-400"
               placeholder="Your message here..."
             />
-            <ErrorMessage name="comment" class="text-red-500 text-xs mt-1" />
+            <p>v-if="errors.comment" class="text-red-500 text-xs mt-1"{{errors.comment}}</p>
           </div>
 
           <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600 space-x-4">
@@ -71,7 +72,7 @@
             </div>
           </div>
         </div>
-      </Form>
+      </form>
 
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-6">
         By booking a ticket, you agree to our
@@ -84,16 +85,25 @@
 </template>
 
 <script setup>
-import { Form, Field, ErrorMessage } from 'vee-validate';
-import * as yup from 'yup';
 
+import { object, string } from 'zod';
+  
 // Define form schema
-const schema = yup.object({
-  comment: yup.string().required('Please provide your comment.')
-});
+const validationSchema = toTypedSchema(
+  object({
+    comment: string().min(10, 'Comment must be at least 10 characters long').max(500, 'Comment must be at most 500 characters long')
+  })
+)
+
+const {handleSubmit, errors} = useForm({
+  validationSchema
+})
+
+const {value : comment} = useField("comment")
 
 // Submit handler
-function handleSubmit(values) {
-  console.log('Form submitted', values);
-}
+const onSubmit = handleSubmit((values) => {
+  alert("Your message has been sent!")
+})
+
 </script>

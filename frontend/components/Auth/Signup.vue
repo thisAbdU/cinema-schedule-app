@@ -29,20 +29,60 @@
         <div class="bg-gray-800 bg-opacity-50 backdrop-blur-md p-8 rounded-xl shadow-lg border border-gray-700">
           <h2 class="text-3xl font-bold mb-6 text-white">Sign Up</h2>
 
-          <form @submit.prevent="handleSubmit">
+          <form @submit="onSubmit">
             <div class="space-y-4">
-              <div v-for="field in formFields" :key="field.id">
-                <label :for="field.id" class="block text-sm font-medium text-gray-300 mb-1">{{ field.label }}</label>
+                <div class="mb-4">
+                <!-- Username Field -->
+                <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
                 <input
-                  :type="field.type"
-                  :id="field.id"
-                  v-model="form[field.id]"
-                  :placeholder="field.placeholder"
+                  v-model="username"
+                  type="text"
+                  id="username"
+                  placeholder="Enter your username"
                   class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                  required
                 />
+                <p v-if="errors.username" class="text-red-500 text-xs mt-1">{{ errors.username }}</p>
               </div>
-            </div>
+
+              <div class="mb-4">
+                <!-- Email Field -->
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                <input
+                  v-model="email"
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+                <p v-if="errors.email" class="text-red-500 text-xs mt-1">{{ errors.email }}</p>
+              </div>
+
+              <div class="mb-4">
+                <!-- Password Field -->
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                <input
+                  v-model="password"
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+                <p v-if="errors.password" class="text-red-500 text-xs mt-1">{{ errors.password }}</p>
+              </div>
+
+              <div class="mb-4">
+                <!-- Confirm Password Field -->
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">Confirm Password</label>
+                <input
+                  v-model="confirmPassword"
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Confirm your password"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+                <p v-if="errors.confirmPassword" class="text-red-500 text-xs mt-1">{{ errors.confirmPassword }}</p>
+              </div>
+      </div>
 
             <button
               type="submit"
@@ -87,39 +127,65 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { CircleUser, FacebookIcon } from 'lucide-vue-next'
+import { CircleUser, FacebookIcon } from 'lucide-vue-next';
+// import useSignUp from '~/composables/useRegister';
+// import useUser from '~/composables/useNewUser';
+import { toTypedSchema } from '@vee-validate/zod';
+import { object, string } from 'zod';
 
+// Validation schema
+const validationSchema = toTypedSchema(
+  object({
+    username: string().min(4, {message : "needs to be above 3 characters"}).max(20, {message : "needs to be below 20 characters"}).regex(/^[A-Za-z]+$/, 'Username must only contain characters'),
+    email: string().min(1, {message : "Email is required"}).email({message: "Invalid email"}),
+    password: string().min(5, {message : "Must be above 5 characters"}),
+    confirmPassword: string().refine((val, ctx) => val === ctx.parent.password, {message: 'Passwords must match'}),
+  }),
+);
 
-const form = ref({
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: ''
-})
-
-const formFields = [
-  { id: 'name', type: 'text', label: 'Username', placeholder: 'Enter your username' },
-  { id: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' },
-  { id: 'password', type: 'password', label: 'Password', placeholder: 'Create a password' },
-  { id: 'confirmPassword', type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password' }
-]
-
+// Social providers for buttons
 const socialProviders = [
   { name: 'Google', icon: CircleUser, bgClass: 'bg-white', textClass: 'text-gray-800', color: 'gray' },
-  { name: 'Facebook', icon: FacebookIcon, bgClass: 'bg-blue-600', textClass: 'text-white', color: 'blue' }
-]
+  { name: 'Facebook', icon: FacebookIcon, bgClass: 'bg-blue-600', textClass: 'text-white', color: 'blue' },
+];
 
-const handleSubmit = () => {
-  if (form.value.password !== form.value.confirmPassword) {
-    alert('Passwords do not match')
-    return
-  }
-  // TODO: Implement actual form submission logic here
-  
-  // Redirect to /auth/otp
-  window.location.href = '/auth/otp'
-}
+// Form state
+const {handleSubmit, errors} = useForm({validationSchema});
+
+const { value: username } = useField('username');
+const { value: email } = useField('email');
+const { value: password } = useField('password');
+const { value: confirmPassword } = useField('confirmPassword');
+
+// Composable for signup
+// const { executeSignUp } = useSignUp();
+
+// Composable for setting user
+// const { setUser } = useUser();
+
+// Form submission handler
+const onSubmit = handleSubmit((values) => {
+  alert("Submitted");
+  console.log(values);
+  console.log("Errors", errors.value);
+
+// const user = {
+//     username: values.username,
+//     email: values.email,
+//     password: values.password,
+//   };
+
+//   console.log("Submitted values", values);  // Ensure the form values are populated correctly
+
+//   try {
+//     const response = await executeSignUp(user);  // Call signup composable
+//     setUser(response);  // Set user data
+//     router.replace({ path: '/auth/otp' });  // Redirect to OTP page
+//     console.log("Signup successful", response); // Log the response or handle success
+//   } catch (error) {
+//     console.error("Signup error", error);  // Log the error
+//   }
+});
 
 </script>
 

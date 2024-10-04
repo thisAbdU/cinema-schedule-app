@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@vee-validate/nuxt": "^4.13.2",
-    "@vee-validate/yup": "^4.13.2",
+    "@vee-validate/zod": "^4.13.2",
+    "@vue/apollo-composable": "^4.2.1",
+    "@vueuse/core": "^11.1.0",
     "autoprefixer": "^10.4.20",
     "chart.js": "^4.4.4",
     "flowbite": "^2.5.1",
@@ -19,10 +21,8 @@
     "nuxt": "^3.13.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
-    "vee-validate": "^4.13.2",
     "vue": "latest",
-    "vue-router": "^4.4.5",
-    "yup": "^1.4.0"
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@nuxtjs/apollo": "^5.0.0-alpha.14",
