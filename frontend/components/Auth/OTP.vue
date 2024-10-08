@@ -49,12 +49,12 @@
           <div class="mt-6 text-center text-sm">
             <p class="text-gray-400">
               Didn't receive the code?
-              <a href="#" @click.prevent="resendOTP" class="text-pink-500 hover:underline">Resend OTP</a>
+              <NuxtLink to="#" @click.prevent="resendOTP" class="text-pink-500 hover:underline">Resend OTP</NuxtLink>
             </p>
           </div>
 
           <div class="mt-4 text-center text-sm">
-            <a href="/signin" class="text-pink-500 hover:underline">Back to Sign In</a>
+            <NuxtLink to="/signin" class="text-pink-500 hover:underline">Back to Sign In</NuxtLink>
           </div>
         </div>
       </div>

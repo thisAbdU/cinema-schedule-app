@@ -82,14 +82,14 @@
           </div>
 
           <div class="mt-6 flex justify-between text-sm">
-            <a href="/forgot-password" class="text-pink-500 hover:underline">Forgot Password?</a>
-            <a href="/support" class="text-pink-500 hover:underline">Customer Support</a>
+            <NuxtLink to="/auth/forgotpassword" class="text-pink-500 hover:underline">Forgot Password?</NuxtLink>
+            <NuxtLink to="/#contact-section" class="text-pink-500 hover:underline">Customer Support</NuxtLink>
           </div>
 
           <div class="mt-6 text-center text-sm">
             <p class="text-gray-400">
               Don't have an account?
-              <a href="/signup" class="text-pink-500 hover:underline">Sign up</a>
+              <NuxtLink to="/auth/signup" class="text-pink-500 hover:underline">Sign up</NuxtLink>
             </p>
           </div>
         </div>

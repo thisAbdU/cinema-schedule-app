@@ -111,10 +111,10 @@
           <div class="mt-6 text-center text-sm">
             <p class="text-gray-400">
               Already registered?
-              <a href="/auth/signin" class="text-pink-500 hover:underline">Sign in</a>
+              <NuxtLink to="/auth/signin" class="text-pink-500 hover:underline">Sign in</NuxtLink>
             </p>
             <p class="mt-2">
-              <a href="/#contact-section" class="text-pink-500 hover:underline">Customer Support</a>
+              <NuxtLink to="/#contact-section" class="text-pink-500 hover:underline">Customer Support</NuxtLink>
             </p>
 
             <p class="mb-20">

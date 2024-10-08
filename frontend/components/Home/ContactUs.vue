@@ -19,7 +19,7 @@
               class="w-full px-3 py-2 text-sm text-gray-900 bg-white border rounded-lg dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500 dark:text-white dark:placeholder-gray-400"
               placeholder="Your message here..."
             />
-            <p>v-if="errors.comment" class="text-red-500 text-xs mt-1"{{errors.comment}}</p>
+            <!-- <p>v-if="errors.comment" class="text-red-500 text-xs mt-1"{{errors.comment}}</p> -->
           </div>
 
           <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600 space-x-4">
