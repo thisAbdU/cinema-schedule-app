@@ -128,18 +128,18 @@
 
 <script setup>
 import { CircleUser, FacebookIcon } from 'lucide-vue-next';
-// import useSignUp from '~/composables/useRegister';
-// import useUser from '~/composables/useNewUser';
 import { toTypedSchema } from '@vee-validate/zod';
 import { object, string } from 'zod';
+import { useApolloClient } from '@vue/apollo-composable';
+
 
 // Validation schema
 const validationSchema = toTypedSchema(
   object({
     username: string().min(4, {message : "needs to be above 3 characters"}).max(20, {message : "needs to be below 20 characters"}).regex(/^[A-Za-z]+$/, 'Username must only contain characters'),
     email: string().min(1, {message : "Email is required"}).email({message: "Invalid email"}),
-    password: string().min(5, {message : "Must be above 5 characters"}),
-    confirmPassword: string().refine((val, ctx) => val === ctx.parent.password, {message: 'Passwords must match'}),
+    password: string().min(6, {message : "Must be above 5 characters"}),
+    // confirmPassword: string().refine((val) => val === ref('password'), { message: 'Passwords must match' }),
   }),
 );
 
@@ -157,36 +157,59 @@ const { value: email } = useField('email');
 const { value: password } = useField('password');
 const { value: confirmPassword } = useField('confirmPassword');
 
-// Composable for signup
-// const { executeSignUp } = useSignUp();
+// Define the GraphQL mutation
+const SIGN_UP = gql`
+  mutation signUp($input: SignUpInput!) {
+    signUp(input: $input) {
+      message
+    }
+  }
+`;
 
-// Composable for setting user
-// const { setUser } = useUser();
+// Get the Apollo client
+const { client: apolloClient } = useApolloClient();
 
-// Form submission handler
-const onSubmit = handleSubmit((values) => {
-  alert("Submitted");
-  console.log(values);
-  console.log("Errors", errors.value);
 
-// const user = {
-//     username: values.username,
-//     email: values.email,
-//     password: values.password,
-//   };
-
-//   console.log("Submitted values", values);  // Ensure the form values are populated correctly
-
-//   try {
-//     const response = await executeSignUp(user);  // Call signup composable
-//     setUser(response);  // Set user data
-//     router.replace({ path: '/auth/otp' });  // Redirect to OTP page
-//     console.log("Signup successful", response); // Log the response or handle success
-//   } catch (error) {
-//     console.error("Signup error", error);  // Log the error
-//   }
+// Function to handle the mutation submission
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    console.log('Mutation:', SIGN_UP);
+    console.log('Variables:', {
+      input: {
+        email: values.email,
+        password: values.password,
+        username: values.username,
+      },
+    });
+    const response = await apolloClient.mutate({
+      mutation: SIGN_UP,
+      variables: {
+        input: {
+          email: values.email,
+          password: values.password,
+          username: values.username,
+        },
+      },
+    });
+    console.log('Sign up success:', response.data.signUp.message);
+    // Handle successful signup (e.g., show success message, redirect user)
+  } catch (error) {
+    console.error('Signup error:', error);
+    
+    if (error.networkError) {
+      console.error('Network error:', error.networkError);
+      if (error.networkError.result) {
+        console.error('Server error details:', error.networkError.result);
+      }
+    } else if (error.graphQLErrors) {
+      console.error('GraphQL errors:', error.graphQLErrors);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    
+    alert(error.message || 'An error occurred during signup.');
+  }
 });
-
 </script>
 
 <style scoped>

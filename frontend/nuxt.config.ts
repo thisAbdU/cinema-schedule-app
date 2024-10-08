@@ -6,15 +6,15 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
   ],
 
-  // Uncomment and configure the Apollo module if needed
-  // apollo: {
-  //   autoImports: true,
-  //   clients: {
-  //     default: {
-  //       httpEndpoint: 'http://localhost:8080/v1/graphql'
-  //     }
-  //   },
-  // },
+  apollo: {
+    autoImports: true,
+    clients: {
+      default: {
+        httpEndpoint: 'http://localhost:8080/v1/graphql',
+        connectToDevTools: true,
+      }
+    },
+  },
   
   devtools: { enabled: true },
 
