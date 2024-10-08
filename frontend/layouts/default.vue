@@ -10,7 +10,7 @@
     <!-- Main content area -->
     <div class="relative z-10 flex flex-col min-h-screen">
       <!-- Conditionally render Navbar -->
-      <Navbar v-if="!$route.meta.hideNavbar" />
+      <component :is="currentNavbar" />
       <main class="flex-grow pt-12 pb-8"> 
         <slot />
       </main>
@@ -21,15 +21,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
 import Navbar from '~/components/Navbar.vue'
 import Footer from '~/components/Footer.vue'
 import UserNavbar from '~/components/UserNavbar.vue'
 
-const route = useRoute()
 const lines = ref([])
 
+const { isAuthenticated, checkAuth } = useAuth();
+
+const currentNavbar = computed(() => 
+  isAuthenticated.value ? UserNavbar : Navbar
+);
+
 onMounted(() => {
+  checkAuth();
   lines.value = Array.from({ length: 5 }, (_, i) => ({
     top: `${20 * i}%`,
     left: '-25%',

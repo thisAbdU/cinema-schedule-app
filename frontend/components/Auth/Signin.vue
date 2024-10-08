@@ -30,18 +30,30 @@
         <div class="bg-gray-800 bg-opacity-50 backdrop-blur-md p-8 rounded-xl shadow-lg border border-gray-700">
           <h2 class="text-3xl font-bold mb-6 text-white">Sign In</h2>
 
-          <form @submit.prevent="handleSubmit">
+          <form @submit.prevent="onSubmit">
             <div class="space-y-4">
-              <div v-for="field in formFields" :key="field.id">
-                <label :for="field.id" class="block text-sm font-medium text-gray-300 mb-1">{{ field.label }}</label>
+              <div>
+                <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
                 <input
-                  :type="field.type"
-                  :id="field.id"
-                  v-model="form[field.id]"
-                  :placeholder="field.placeholder"
+                  type="username"
+                  id="username"
+                  v-model="username"
+                  placeholder="Enter your username"
                   class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                  required
                 />
+                <p v-if="errors.username" class="text-red-500 text-xs mt-1">{{ errors.username }}</p>
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  v-model="password"
+                  placeholder="Enter your password"
+                  class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+                <p v-if="errors.password" class="text-red-500 text-xs mt-1">{{ errors.password }}</p>
               </div>
             </div>
 
@@ -87,29 +99,43 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import {CircleUser, FacebookIcon } from 'lucide-vue-next'
+import { toTypedSchema } from '@vee-validate/zod';
+import { object, string } from 'zod';
+import { useForm, useField } from 'vee-validate';
+import { useSignin } from '@/composables/useLogin';
+import { useRouter } from 'vue-router';
 
-const form = ref({
-  email: '',
-  password: ''
-})
+const router = useRouter();
 
-const formFields = [
-  { id: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' },
-  { id: 'password', type: 'password', label: 'Password', placeholder: 'Enter your password' }
-]
+// Validation schema
+const validationSchema = toTypedSchema(
+  object({
+    username: string().min(1, { message: "Username is required" }),
+    password: string().min(6, { message: "Password must be at least 6 characters" }),
+  })
+);
 
-const socialProviders = [
-  { name: 'Google', icon: CircleUser, bgClass: 'bg-white', textClass: 'text-gray-800', color: 'gray' },
-  { name: 'Facebook', icon: FacebookIcon, bgClass: 'bg-blue-600', textClass: 'text-white', color: 'blue' }
-]
+// Form state
+const { handleSubmit, errors } = useForm({ validationSchema });
 
-const handleSubmit = () => {
-  // TODO: Implement actual form submission logic here
-  console.log('Form submitted:', form.value)
-  alert('Sign in form submitted!')
-}
+const { value: username } = useField('username');
+const { value: password } = useField('password');
+
+// Use the signin composable
+const { signin, loading, error: signinError } = useSignin();
+
+// Function to handle the form submission
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    const result = await signin(values.username, values.password);
+    console.log('Sign in success:', result.message);
+    // Redirect to dashboard or home page after successful login
+    router.push('/movies');
+  } catch (error) {
+    // The error is already handled and stored in signinError
+    console.error('Sign in failed');
+  }
+});
 </script>
 
 <style scoped>
