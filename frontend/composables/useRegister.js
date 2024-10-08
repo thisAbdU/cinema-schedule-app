@@ -1,24 +1,35 @@
-import { useMutation } from '@vue/apollo-composable';
-import { SIGNUP_MUTATION } from '../graphql/mutations/signup';
+import { ref } from 'vue';
+import { useApolloClient } from '@vue/apollo-composable';
+import { SIGN_UP } from '../graphql/mutations/signup';
 
-export default function useSignUp() {
-  const { mutate, loading } = useMutation(SIGNUP_MUTATION);
+export function useSignup() {
+  const { client: apolloClient } = useApolloClient();
+  const loading = ref(false);
+  const error = ref(null);
 
-  const executeSignUp = async (userInput) => {
+  const signUp = async (input) => {
+    loading.value = true;
+    error.value = null;
+
     try {
-      const response = await mutate({ input: userInput }); // Use 'input' for mutation argument
-
-      if (!response?.data?.signUp) {
-        throw new Error('Invalid response');
-      }
-
-      // Return the message from the SignUpOutput
-      return response.data.signUp.message;
-
+      const response = await apolloClient.mutate({
+        mutation: SIGN_UP,
+        variables: { input },
+      });
+      console.log('Sign up success:', response.data.signUp.message);
+      return response.data.signUp;
     } catch (err) {
-      throw new Error(err.message || 'Sign-up failed');
+      console.error('Signup error:', err);
+      error.value = err.message || 'An error occurred during signup.';
+      throw err;
+    } finally {
+      loading.value = false;
     }
   };
 
-  return { executeSignUp, loading };
+  return {
+    signUp,
+    loading,
+    error,
+  };
 }

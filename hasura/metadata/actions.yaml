@@ -46,7 +46,7 @@ actions:
         template_engine: Kriti
         version: 2
     permissions:
-      - role: user
+      - role: anonymous
 custom_types:
   enums: []
   input_objects:
