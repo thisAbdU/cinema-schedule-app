@@ -55,7 +55,7 @@
           <div class="mt-6 text-center text-sm">
             <p class="text-gray-400">
               Remember your password?
-              <a href="/signin" class="text-pink-500 hover:underline">Sign In</a>
+              <NuxtLink to="/signin" class="text-pink-500 hover:underline">Sign In</NuxtLink>
             </p>
           </div>
         </div>

@@ -9,13 +9,22 @@
         Explore the latest movies and book your tickets in advance. View details for more information about each film.
       </p>
 
+      <div v-if="loading" class="text-center py-8">
+        <p class="text-xl">Loading movies...</p>
+      </div>
+
+      <div v-else-if="error" class="text-center py-8">
+        <p class="text-xl text-red-500">Error loading movies. Please try again later.</p>
+      </div>
+
+      <div v-else >
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div 
+        <li
           v-for="movie in movies" 
           :key="movie.id" 
           class="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg group"
         >
-          <img :src="movie.poster" :alt="movie.title" class="w-full h-full object-cover" />
+          <img :src="movie.poster_url" :alt="movie.title" class="w-full h-full object-cover" />
           
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           
@@ -37,37 +46,32 @@
               </button>
             </div>
           </div>
-        </div>
+        </li>
+      </div>
+      <Pagination 
+          :total-pages="totalPages" 
+          :initial-page="currentPage"
+          @page-change="handlePageChange"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useMovies } from '@/composables/useMovies'
+import Pagination from './Pagination.vue'
 
-const movies = ref([
-  { id: 1, title: "The Shawshank Redemption", genre: "Drama", poster: "https://i.pinimg.com/236x/c6/61/62/c66162a5d679cd5716b4506e23ba8f35.jpg" },
-  { id: 2, title: "The Godfather", genre: "Crime", poster: "https://cdn.cinematerial.com/p/297x/zhvo2hr8/drishyam-indian-movie-poster-md.jpg?v=1572887221" },
-  { id: 3, title: "The Dark Knight", genre: "Action", poster: "https://i.pinimg.com/236x/5d/1e/ff/5d1eff9c93d5241b86a49625942175de.jpg" },
-  { id: 4, title: "12 Angry Men", genre: "Drama", poster: "https://i.pinimg.com/236x/b2/4d/1d/b24d1d2e3d44e9114176785c215ec353.jpg" },
-  { id: 5, title: "Pulp Fiction", genre: "Crime", poster: "https://i.pinimg.com/236x/c6/61/62/c66162a5d679cd5716b4506e23ba8f35.jpg" },
-  { id: 6, title: "Schindler's List", genre: "Biography", poster: "https://cdn.cinematerial.com/p/297x/zhvo2hr8/drishyam-indian-movie-poster-md.jpg?v=1572887221" },
-  { id: 7, title: "Inception", genre: "Sci-Fi", poster: "https://i.pinimg.com/236x/5d/1e/ff/5d1eff9c93d5241b86a49625942175de.jpg" },
-  { id: 8, title: "Forrest Gump", genre: "Drama", poster: "https://i.pinimg.com/236x/b2/4d/1d/b24d1d2e3d44e9114176785c215ec353.jpg" },
-  { id: 9, title: "The Matrix", genre: "Sci-Fi", poster: "https://i.pinimg.com/236x/c6/61/62/c66162a5d679cd5716b4506e23ba8f35.jpg" },
-  { id: 10, title: "Goodfellas", genre: "Crime", poster: "https://cdn.cinematerial.com/p/297x/zhvo2hr8/drishyam-indian-movie-poster-md.jpg?v=1572887221" },
-  { id: 11, title: "The Silence of the Lambs", genre: "Thriller", poster: "https://i.pinimg.com/236x/5d/1e/ff/5d1eff9c93d5241b86a49625942175de.jpg" },
-  { id: 12, title: "Saving Private Ryan", genre: "War", poster: "https://i.pinimg.com/236x/b2/4d/1d/b24d1d2e3d44e9114176785c215ec353.jpg" },
-])
+const currentPage = ref(1)
+const pageSize = 12
 
-const buyTicket = (movieId) => {
-  // TODO: Implement ticket purchase logic
-  console.log(`Buying ticket for movie with ID: ${movieId}`)
-}
+const { movies, totalCount, loading, error, changePage, buyTicket, viewDetails } = useMovies(currentPage.value, pageSize)
 
-const viewDetails = (movieId) => {
-  // TODO: Implement view details logic
-  console.log(`Viewing details for movie with ID: ${movieId}`)
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize))
+
+const handlePageChange = (newPage) => {
+  currentPage.value = newPage
+  changePage(newPage)
 }
 </script>

@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
   totalPages: {
@@ -64,6 +64,10 @@ const props = defineProps({
 const emit = defineEmits(['page-change'])
 
 const currentPage = ref(props.initialPage)
+
+watch(() => props.initialPage, (newInitialPage) => {
+  currentPage.value = newInitialPage
+})
 
 const visiblePages = computed(() => {
   const delta = 2
