@@ -3,6 +3,5 @@
     <MoviesAdBanner class="mt-10"></MoviesAdBanner>
     <MoviesFilterMovie class="ml-4"></MoviesFilterMovie> 
     <MoviesListOfMovies></MoviesListOfMovies>
-    <MoviesPagination class="mt-4"></MoviesPagination>
     </div>
 </template>

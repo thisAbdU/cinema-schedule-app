@@ -48,25 +48,28 @@
           </div>
         </li>
       </div>
+      
+      <!-- Pagination -->
+       <div class="flex justify-center items-center mt-12 mb-8">
       <Pagination 
           :total-pages="totalPages" 
-          :initial-page="currentPage"
+          :current-page="currentPage"
           @page-change="handlePageChange"
         />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
 import { useMovies } from '@/composables/useMovies'
 import Pagination from './Pagination.vue'
 
 const currentPage = ref(1)
 const pageSize = 12
 
-const { movies, totalCount, loading, error, changePage, buyTicket, viewDetails } = useMovies(currentPage.value, pageSize)
+const { movies, totalCount, loading, error, changePage, buyTicket, viewDetails } = useMovies(currentPage, pageSize)
 
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize))
 
