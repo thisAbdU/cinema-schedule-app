@@ -33,7 +33,7 @@
             <p class="text-sm text-gray-300 mb-4">{{ movie.genre }}</p>
             <div class="flex space-x-2">
               <button 
-                @click="buyTicket(movie.id)"
+                @click="buyTicket(movie)"
                 class="flex-1 bg-gradient-to-r from-pink-500 to-orange-400 text-white px-4 py-2 rounded-md hover:from-pink-600 hover:to-orange-500 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
                 Buy Ticket
@@ -63,13 +63,18 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import { useMovies } from '@/composables/useMovies'
 import Pagination from './Pagination.vue'
+
+const { $locally } = useNuxtApp()
 
 const currentPage = ref(1)
 const pageSize = 12
 
-const { movies, totalCount, loading, error, changePage, buyTicket, viewDetails } = useMovies(currentPage, pageSize)
+const router = useRouter()
+
+const { movies, totalCount, loading, error, changePage} = useMovies(currentPage, pageSize)
 
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize))
 
@@ -77,4 +82,20 @@ const handlePageChange = (newPage) => {
   currentPage.value = newPage
   changePage(newPage)
 }
+
+const buyTicket = (movie) => {
+    // Store all relevant movie details
+    const movieDetails = {
+        id: movie.id,
+        title: movie.title,
+        poster: movie.poster_url,
+        duration: movie.duration,
+        genre: movie.genre
+    }
+
+    $locally.setItem('movieDetails', JSON.stringify(movieDetails))
+    
+    router.push(`/movie/buyticket/`)
+}
+
 </script>

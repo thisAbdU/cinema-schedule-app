@@ -59,20 +59,13 @@
               />
             </div>
             <button
-              type="submit"
+              type="button"
+              @click="handleSubmit"
               :disabled="selectedSeats.length === 0"
               class="w-full bg-custom-gradient to-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-custom-gradient-hover transition mb-4"
             >
               Book Seats
             </button>
-            <button
-            type="button"
-            @click="proceedToCheckout"
-            :disabled="selectedSeats.length === 0"
-            class="w-full bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition ease-in-out duration-300"
-          >
-            Proceed to Checkout
-          </button>
           </form>
         </div>
         <div v-if="error" class="mt-4 p-4 bg-red-900 bg-opacity-50 text-red-200 rounded-lg flex items-center backdrop-filter backdrop-blur-sm">
@@ -83,94 +76,70 @@
         </div>
       </div>
     </div>
+    
+    <ConfirmationModal 
+      :show="showConfirmationModal"
+      :selected-seats="selectedSeats"
+      @close="closeConfirmationModal"
+      @checkout="handleCheckout"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import ConfirmationModal from './ConfirmationModal.vue'
+import { useRouter } from 'vue-router'
+import { useMovieBooking } from '@/composables/useMovieBooking'
 
-const createSeatRows = () => {
-  const rows = []
-  for (let i = 0; i < 5; i++) {
-    const row = []
-    for (let j = 0; j < 8; j++) {
-      row.push({
-        id: i * 8 + j + 1,
-        status: Math.random() < 0.1 ? 'reserved' : 'available'
-      })
-    }
-    rows.push(row)
-  }
-  return rows
-}
+const router = useRouter()
+const { $locally } = useNuxtApp()
 
-const seatRows = ref(createSeatRows())
-const selectedSeats = ref([])
-const error = ref(null)
+const movieDetails = ref(($locally.getItem('movieDetails')))
+const movieDetailsValue = JSON.parse(movieDetails.value)
+const movieId = movieDetailsValue.id
 
-const totalPrice = computed(() => selectedSeats.value.length * 10)
+const { movie, loading, error, seatRows, selectedSeats, totalPrice, formattedDate, formattedTime, getSeatColor, getSeatPath, selectSeat } = useMovieBooking(movieId)
 
-const getSeatColor = (seat) => {
-  switch (seat.status) {
-    case 'reserved': return '#FF4136'
-    case 'booked': return '#2ECC40'
-    default: return '#7FDBFF'
-  }
-}
-
-const getSeatPath = (rowIndex, seatIndex) => {
-  const x = 60 + seatIndex * 80
-  const y = 20 + rowIndex * 80
-  return `
-    M ${x} ${y}
-    a 20 20 0 0 1 40 0
-    v 30
-    h 10
-    v 10
-    h -60
-    v -10
-    h 10
-    v -30
-    a 20 20 0 0 1 0 0
-    z
-  `
-}
-
-const selectSeat = (seat) => {
-  if (seat.status === 'reserved') {
-    error.value = 'This seat is reserved.'
-    return
-  }
-
-  if (selectedSeats.value.length >= 10 && seat.status === 'available') {
-    error.value = 'You can only book up to 10 seats at a time.'
-    return
-  }
-
-  error.value = null
-  if (seat.status === 'available') {
-    seat.status = 'booked'
-    selectedSeats.value.push(seat)
-  } else {
-    seat.status = 'available'
-    const index = selectedSeats.value.findIndex(s => s.id === seat.id)
-    if (index !== -1) {
-      selectedSeats.value.splice(index, 1)
-    }
-  }
-}
+const showConfirmationModal = ref(false)
 
 const handleSubmit = () => {
-  alert(`Seats booked: ${selectedSeats.value.length}. Total price: $${totalPrice.value}`)
+  showConfirmationModal.value = true
 }
 
-const proceedToCheckout = () => {
-  if (selectedSeats.value.length > 0) {
-    alert('Proceeding to checkout...')
-  } else {
-    error.value = 'Please select at least one seat.'
+const closeConfirmationModal = () => {
+  showConfirmationModal.value = false
+}
+
+const handleCheckout = () => {
+  // Get the current selected seats and total price from the composable
+  const seatsToStore = selectedSeats.value.map(seat => ({
+    id: seat.id,
+    row: String.fromCharCode(65 + Math.floor((seat.id - 1) / 8)),
+    number: (seat.id - 1) % 8 + 1
+  }))
+
+  // Create a plain JavaScript object with all the details we want to store
+  const bookingDetails = {
+    movieId: movieId,
+    movieTitle: movieDetailsValue.title,
+    selectedSeats: seatsToStore,
+    date: formattedDate.value, 
+    time: formattedTime.value, 
+    totalPrice: totalPrice.value 
+  }
+
+  // Store the booking details in local storage
+  try {
+    $locally.setItem('bookingDetails', JSON.stringify(bookingDetails))
+    router.push('/movie/pay')
+    showConfirmationModal.value = false
+  } catch (error) {
+    console.error('Error storing booking details:', error)
+    // Handle the error (e.g., show an error message to the user)
   }
 }
+
 </script>
 
 <style scoped>

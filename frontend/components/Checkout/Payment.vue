@@ -25,14 +25,14 @@
                   <span class="font-semibold">Movie:</span>
                   <span class="text-white">{{ bookingDetails.movie }}</span>
                 </div>
-                <div class="flex justify-between items-center">
+                <!-- <div class="flex justify-between items-center">
                   <span class="font-semibold">Date:</span>
                   <span class="text-white">{{ bookingDetails.date }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="font-semibold">Time:</span>
                   <span class="text-white">{{ bookingDetails.time }}</span>
-                </div>
+                </div> -->
                 <div class="flex justify-between items-center">
                   <span class="font-semibold">Seats:</span>
                   <span class="text-white">{{ bookingDetails.seats.join(', ') }}</span>
@@ -94,8 +94,8 @@
   <div class="bg-gray-900 bg-opacity-95 p-6 rounded-lg shadow-lg max-w-md w-full">
     <h2 class="text-2xl font-bold text-center mb-6 text-white">Your Ticket</h2>
     <p class="mb-4 text-gray-300"><strong>Movie:</strong> {{ bookingDetails.movie }}</p>
-    <p class="mb-4 text-gray-300"><strong>Date:</strong> {{ bookingDetails.date }}</p>
-    <p class="mb-4 text-gray-300"><strong>Time:</strong> {{ bookingDetails.time }}</p>
+    <!-- <p class="mb-4 text-gray-300"><strong>Date:</strong> {{ bookingDetails.date }}</p>
+    <p class="mb-4 text-gray-300"><strong>Time:</strong> {{ bookingDetails.time }}</p> -->
     <p class="mb-4 text-gray-300"><strong>Seats:</strong> {{ bookingDetails.seats.join(', ') }}</p>
     <p class="mb-6 text-gray-300"><strong>Total:</strong> ${{ bookingDetails.total }}</p>
     <button @click="downloadTicket" class="w-full bg-gradient-to-r from-[#FF4766] to-[#5C28D4] text-white font-bold py-3 rounded-lg hover:from-[#FF5F7E] hover:to-[#7440E7] transition duration-300 ease-in-out transform hover:-translate-y-1">
@@ -109,15 +109,31 @@
 
     </div>
   </template>
+
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
+const { $locally } = useNuxtApp()
+
+const booking_Details = ref(($locally.getItem('bookingDetails')))
+const bookingDetailsValue = JSON.parse(booking_Details.value)
+
+console.log("Booking details in payment selected seats", bookingDetailsValue)
+
+const seatIdentifiers = bookingDetailsValue.selectedSeats
+  .map(seat => `${seat.row}${seat.number}`)
+  .sort((a, b) => {
+    if (a[0] !== b[0]) {
+      return a[0].localeCompare(b[0]); // Sort by row first
+    }
+    return parseInt(a.slice(1)) - parseInt(b.slice(1)); // Then by seat number
+  });
+
+console.log(seatIdentifiers);
 
 const bookingDetails = ref({
-  movie: 'Interstellar',
-  date: '2023-06-15',
-  time: '20:00',
-  seats: ['A1', 'A2', 'A3'],
-  total: 30 // Assuming $10 per ticket
+  movie: bookingDetailsValue.movieTitle,
+  seats: seatIdentifiers,
+  total: bookingDetailsValue.totalPrice
 })
 
 const paymentDetails = ref({
@@ -130,7 +146,6 @@ const paymentDetails = ref({
 const showTicketModal = ref(false)
 
 const processPayment = () => {
-  console.log('Processing payment:', paymentDetails.value)
   alert('Payment processed successfully!')
   showTicketModal.value = true
 }
@@ -153,5 +168,6 @@ const downloadTicket = () => {
   link.download = 'ticket.txt'
   link.click()
 }
+
 </script>
   

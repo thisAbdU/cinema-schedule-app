@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/apollo',
     '@vee-validate/nuxt',
+    '@pinia/nuxt',
   ],
 
   apollo: {
