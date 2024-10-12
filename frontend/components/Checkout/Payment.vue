@@ -57,27 +57,43 @@
             <form @submit.prevent="processPayment">
               <div class="mb-4">
                 <label for="cardName" class="block text-gray-300 font-medium mb-2">Name on Card</label>
-                <input type="text" id="cardName" v-model="paymentDetails.cardName" required
-                  class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]">
+                <input 
+                type="text" 
+                id="cardName" 
+                v-model="cardName"
+                class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]">
+                <p v-if="errors.cardName" class="text-red-500 text-xs mt-1">{{ errors.cardName }}</p>
               </div>
               <div class="mb-4">
                 <label for="cardNumber" class="block text-gray-300 font-medium mb-2">Card Number</label>
-                <input type="text" id="cardNumber" v-model="paymentDetails.cardNumber" required
-                  class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]"
-                  placeholder="1234 5678 9012 3456">
+                <input 
+                type="text" 
+                id="cardNumber" 
+                v-model="cardNumber"
+                class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]"
+                placeholder="1234 5678 9012 3456">
+                <p v-if="errors.cardNumber" class="text-red-500 text-xs mt-1">{{ errors.cardNumber }}</p>
               </div>
               <div class="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <label for="expiryDate" class="block text-gray-300 font-medium mb-2">Expiry Date</label>
-                  <input type="text" id="expiryDate" v-model="paymentDetails.expiryDate" required
-                    class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]"
-                    placeholder="MM/YY">
+                  <input 
+                  type="text" 
+                  id="expiryDate" 
+                  v-model="expiryDate"
+                  class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]"
+                  placeholder="MM/YY">
+                  <p v-if="errors.expiryDate" class="text-red-500 text-xs mt-1">{{ errors.expiryDate }}</p>
                 </div>
                 <div>
                   <label for="cvv" class="block text-gray-300 font-medium mb-2">CVV</label>
-                  <input type="text" id="cvv" v-model="paymentDetails.cvv" required
-                    class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]"
-                    placeholder="123">
+                  <input 
+                  type="text" 
+                  id="cvv" 
+                  v-model="cvv"
+                  class="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#FF4766]"
+                  placeholder="123">
+                  <p v-if="errors.cvv" class="text-red-500 text-xs mt-1">{{ errors.cvv }}</p>
                 </div>
               </div>
               <button type="submit"
@@ -112,12 +128,16 @@
 
 <script setup>
 import {ref} from 'vue'
+import { useRouter } from 'vue-router'
+import { toTypedSchema } from '@vee-validate/zod';
+import { object, string } from 'zod';
+
 const { $locally } = useNuxtApp()
+
+const router = useRouter()
 
 const booking_Details = ref(($locally.getItem('bookingDetails')))
 const bookingDetailsValue = JSON.parse(booking_Details.value)
-
-console.log("Booking details in payment selected seats", bookingDetailsValue)
 
 const seatIdentifiers = bookingDetailsValue.selectedSeats
   .map(seat => `${seat.row}${seat.number}`)
@@ -136,21 +156,40 @@ const bookingDetails = ref({
   total: bookingDetailsValue.totalPrice
 })
 
-const paymentDetails = ref({
-  cardName: '',
-  cardNumber: '',
-  expiryDate: '',
-  cvv: ''
-})
+// Validation schema
+const validationSchema = toTypedSchema(
+  object({
+    cardName: string()
+      .min(2, { message: "Name must be at least 2 characters" })
+      .max(50, { message: "Name must be less than 50 characters" })
+      .regex(/^[A-Za-z\s]+$/, 'Name must only contain letters and spaces'),
+    cardNumber: string()
+      .regex(/^[0-9]{16}$/, 'Card number must be 16 digits'),
+    cvv: string()
+      .regex(/^[0-9]{3,4}$/, 'CVV must be 3 or 4 digits'),
+    expiryDate: string()
+      .regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, 'Expiration date must be in MM/YY format')
+  })
+);
+
+const { handleSubmit, errors } = useForm({ validationSchema });
+
+const { value: cardName } = useField('cardName');
+const { value: cardNumber } = useField('cardNumber');
+const { value: cvv } = useField('cvv');
+const { value: expiryDate } = useField('expiryDate');
 
 const showTicketModal = ref(false)
 
-const processPayment = () => {
-  alert('Payment processed successfully!')
-  showTicketModal.value = true
-}
+const processPayment = handleSubmit((values) => {
+  setTimeout(() => {
+    // alert('Payment processed successfully!')
+    showTicketModal.value = true
+  }, 1000); // Simulating a 1-second processing time
+});
 
 const closeTicketModal = () => {
+  router.push('/movies')
   showTicketModal.value = false
 }
 
