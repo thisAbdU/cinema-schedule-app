@@ -15,7 +15,25 @@ export default defineNuxtPlugin(() => {
                         return localStorage.setItem(item, value)
                     }
                 }
-            }
+            },
+            
+            auth: {
+                login: async (username, password) => {
+                  // Implement your login logic here
+                  isAdmin.value = false
+                },
+                loginAsAdmin: async () => {
+                  // Implement admin login logic here
+                  isAdmin.value = true
+                },
+                logout: () => {
+                  // Implement logout logic
+                  isAdmin.value = false
+                },
+                get isAdmin() {
+                  return isAdmin.value
+                }
+              }
         }
     }
 })

@@ -104,9 +104,10 @@ import { object, string } from 'zod';
 import { useForm, useField } from 'vee-validate';
 import { useSignin } from '@/composables/useLogin';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '~/store/auth';
 
 const router = useRouter();
-
+const authStore = useAuthStore()
 // Validation schema
 const validationSchema = toTypedSchema(
   object({
@@ -127,13 +128,44 @@ const { signin, loading, error: signinError } = useSignin();
 // Function to handle the form submission
 const onSubmit = handleSubmit(async (values) => {
   try {
-    const result = await signin(values.username, values.password);
-    console.log('Sign in success:', result.message);
-    // Redirect to dashboard or home page after successful login
-    router.push('/movies');
+    // Check for admin credentials
+    if (values.username === 'admin123' && values.password === 'adminpassword') {
+      // Set admin status in the store
+      authStore.setUser({ username: 'admin123' })
+      authStore.setAdminStatus(true)
+      router.push('/admin/dashboard')
+      return
+    }
+
+    const result = await signin(values.username, values.password)
+    console.log('Signin result:', result)
+
+    // Assuming the result contains user information
+    authStore.setUser(result.user)
+    authStore.setAdminStatus(false) // Ensure non-admin users don't have admin privileges
+
+    router.push('/movies')
   } catch (error) {
-    // The error is already handled and stored in signinError
-    console.error('Sign in failed');
+    // Log the full error object
+    console.error('Sign in failed. Error:', error);
+    
+    // Log specific error details if available
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error('Error data:', error.response.data);
+      console.error('Error status:', error.response.status);
+      console.error('Error headers:', error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('No response received:', error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error message:', error.message);
+    }
+    
+    // You can also set a more detailed error message for the user
+    signinError.value = error.message || 'An error occurred during sign in';
   }
 });
 </script>
